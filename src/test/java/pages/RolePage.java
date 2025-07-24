@@ -65,27 +65,26 @@ public class RolePage {
     public void enterRoleName(String name) throws InterruptedException {
         wait.until(ExpectedConditions.visibilityOf(roleNameField)).clear();
         roleNameField.sendKeys(name);
-
     }
 
     public void selectRoleType(String roleType) throws InterruptedException {
     ElementUtils.selectCustomDropdownOption(driver, "Select role type", roleType);
-    Thread.sleep(200);
+    Thread.sleep(100);
     }
     
     public void selectWorkMode(String workMode) throws InterruptedException {
     ElementUtils.selectCustomDropdownOption(driver, "Select work mode", workMode);
-    Thread.sleep(200);
+    Thread.sleep(100);
     }
 
     public void selectCountry(String country) throws InterruptedException{
         ElementUtils.selectCustomDropdownOption(driver, "Search country...", country);
-    Thread.sleep(200);
+    Thread.sleep(100);
     }
 
     public void selectState(String state)throws InterruptedException{
         ElementUtils.selectCustomDropdownOption(driver, "Search state...", state);
-    Thread.sleep(200);
+    Thread.sleep(100);
     }
 
     public void selectCity(String city)throws InterruptedException{
@@ -101,7 +100,7 @@ public class RolePage {
 
     public void clickSaveButton() throws InterruptedException {
         wait.until(ExpectedConditions.elementToBeClickable(saveBtn)).click();
-        Thread.sleep(200);
+        Thread.sleep(150);
     }
 
     public boolean isSuccessMessageVisible() {

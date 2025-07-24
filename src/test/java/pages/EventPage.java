@@ -94,6 +94,7 @@ public class EventPage {
 
     @FindBy(css = "ul.p-dropdown-items")  // Container for dropdown list
     private WebElement dropdownList;
+
     @FindBy(css = "span[role='combobox']")
     private WebElement itemsPerPageDropdown;
 
@@ -112,7 +113,7 @@ public class EventPage {
         wait.until(ExpectedConditions.visibilityOf(eventTitleField)).sendKeys(title);
     }
 
-public void selectJobRole(String roles) throws InterruptedException {
+    public void selectJobRole(String roles) throws InterruptedException {
     String[] roleArray = roles.split(",");
 
     ElementUtils.searchAndSelectFromMultiDropdown(
@@ -121,7 +122,6 @@ public void selectJobRole(String roles) throws InterruptedException {
         roleArray, driver
     );
 }
-
 
     public void selectEventStartDate(String year, String month, String day, int hour, int minute, String amPm) throws InterruptedException {
         By trigger = By.xpath("(//label[text()='Event Start Date ']/following::button[@aria-label='Choose Date'])[1]");
@@ -181,37 +181,70 @@ public void selectJobRole(String roles) throws InterruptedException {
     );
 }
 
+   public void enterInstitutionAddress(String address) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+    try {
+        // Scroll into view
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", institutionAddress);
 
+        // Wait until visible and interactable
+        WebElement input = wait.until(ExpectedConditions.visibilityOf(institutionAddress));
 
-    public void enterInstitutionAddress(String address) {
-        wait.until(ExpectedConditions.visibilityOf(institutionAddress)).sendKeys(address);
+        // Clear and type
+        input.clear();
+        input.sendKeys(address);
+
+    } catch (ElementClickInterceptedException e) {
+        // Fallback: try sending keys via JS (not recommended unless input is totally blocked)
+        ((JavascriptExecutor) driver).executeScript("arguments[0].value = arguments[1];", institutionAddress, address);
     }
+}
 
-    public void clickSave() {
+
+
+   public void clickSave() {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    try {
+        // Scroll into view
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", saveBtn);
+
+        // Wait until clickable
+        wait.until(ExpectedConditions.elementToBeClickable(saveBtn));
+
+        // Try normal click
         saveBtn.click();
-    }
 
-    public boolean isEventCreatedSuccessfully() {
-        try {
+    } catch (ElementClickInterceptedException e) {
+        // Fallback to JS click
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", saveBtn);
+    }
+}
+public boolean isEventCreatedSuccessfully() {
+    try {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         return wait.until(ExpectedConditions.visibilityOf(successMsg)).isDisplayed();
     } catch (TimeoutException e) {
         return false;
     }
-    }
+}
 
-    public void searchEvent(String eventName) {
+
+    public void searchEvent(String eventName) throws InterruptedException {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    
+    Thread.sleep(200);
+
     wait.until(ExpectedConditions.visibilityOf(searchInput));
     searchInput.clear();
     searchInput.sendKeys(eventName);
-    try {
-        Thread.sleep(500);
-    } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-    }
-    }
+    Thread.sleep(200);
+
+    // Wait for search result to appear (i.e., the event cell becomes visible)
+    String resultXpath = "//table//td[normalize-space(text())='" + eventName + "']";
+    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(resultXpath)));
+}
+
 
     public boolean isEventDisplayedInTable(String expectedEventName) {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -255,5 +288,16 @@ public void selectJobRole(String roles) throws InterruptedException {
     throw new NoSuchElementException("Items per page option '" + visibleText + "' not found.");
 
     }
+
+
+    public void clickEvent(String eventName) {
+    WebDriver driver = BaseTest.getDriver();
+
+    String xpath = "//table//td[normalize-space(text())='" + eventName + "']";
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    WebElement eventCell = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+    eventCell.click();
+}
 
 }
