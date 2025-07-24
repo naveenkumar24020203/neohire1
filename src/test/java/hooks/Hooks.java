@@ -3,6 +3,9 @@ package hooks;
 import base.BaseTest;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import pages.LoginPage;
 import pages.OtpPage;
@@ -11,15 +14,21 @@ import utils.ConfigReader;
 public class Hooks {
 
     @Before
-    public void setUp() {
-        BaseTest.initializeDriver();
-    }
+    public void setUpAndLogin(Scenario scenario) throws InterruptedException {
+        System.out.println("-------------------------------------------------");
+        System.out.println("⏳ Starting Scenario: " + scenario.getName());
 
-    @Before("@event") // Runs only for scenarios tagged with @roles
-    public void loginBeforeRolesFeature() throws InterruptedException {
+        // Initialize WebDriver
+        BaseTest.initializeDriver();
         WebDriver driver = BaseTest.getDriver();
+
+        // Navigate to the application
         driver.get(ConfigReader.getProperty("app.url"));
 
+        ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='80%'");
+
+
+        // Perform login
         LoginPage loginPage = new LoginPage(driver);
         OtpPage otpPage = new OtpPage(driver);
 
@@ -27,13 +36,21 @@ public class Hooks {
         loginPage.enterPassword(ConfigReader.getProperty("password"));
         loginPage.clickLoginButton();
 
+        // Handle OTP
         otpPage.waitForOtpInputs();
-        otpPage.enterOtp("123456"); // Replace with actual OTP handling if needed
+        otpPage.enterOtp("123456"); // Replace with dynamic OTP logic if needed
         otpPage.clickVerifyAccount();
     }
 
     @After
-    public void tearDown() {
+    public void tearDown(Scenario scenario) {
+        if (scenario.isFailed()) {
+            System.out.println("❌ FAILED Scenario: " + scenario.getName());
+        } else {
+            System.out.println("✅ PASSED Scenario: " + scenario.getName());
+        }
+        System.out.println("-------------------------------------------------\n");
+
         BaseTest.quitDriver();
     }
 }

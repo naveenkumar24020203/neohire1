@@ -14,18 +14,42 @@ public class ElementUtils {
     }
 
     // Select from dropdown by visible text
-    public void selectDropdownByVisibleText(By locator, String visibleText) {
-        WebElement dropdown = driver.findElement(locator);
-        Select select = new Select(dropdown);
-        select.selectByVisibleText(visibleText);
-    }
+    // In ElementUtils.java
+    public static void clickAndSelectDropdownValue(WebDriver driver, WebElement dropdown, String valueToSelect) throws InterruptedException {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-    // Select from dropdown by index
-    public void selectDropdownByIndex(By locator, int index) {
-        WebElement dropdown = driver.findElement(locator);
-        Select select = new Select(dropdown);
-        select.selectByIndex(index);
-    }
+    // Step 1: Click the dropdown
+    wait.until(ExpectedConditions.elementToBeClickable(dropdown)).click();
+    Thread.sleep(300);
+
+    // Step 2: Input search (if required) — assuming dropdown opens a searchable list
+
+    // Step 3: Build option locator dynamically
+    By optionLocator = By.xpath("//li[@role='option' and normalize-space()='" + valueToSelect + "']");
+
+    // Step 4: Try to click, fallback to JS click if intercepted
+    wait.until(driver1 -> {
+        try {
+            WebElement option = driver1.findElement(optionLocator);
+            if (option.isDisplayed() && option.isEnabled()) {
+                try {
+                    option.click();
+                    return true;
+                } catch (ElementClickInterceptedException e) {
+                    ((JavascriptExecutor) driver1).executeScript("arguments[0].scrollIntoView(true);", option);
+                    ((JavascriptExecutor) driver1).executeScript("arguments[0].click();", option);
+                    return true;
+                }
+            }
+        } catch (StaleElementReferenceException | NoSuchElementException ignored) {
+        }
+        return false;
+    });
+}
+
+
+
+
 
     // Select multiple values from multi-select dropdown (like NeoHire tag pickers)
     public void selectMultipleFromDropdown(By containerLocator, List<String> values) {
@@ -78,23 +102,62 @@ public class ElementUtils {
     }
 }
 
-    public static void searchAndSelectFromDropdown(WebElement dropdownClickElement, WebElement searchInputElement, String valueToSelect, WebDriver driver) throws InterruptedException {
+  public static void searchAndSelectFromDropdown(
+        WebElement dropdownClickElement,
+        WebElement searchInputElement,
+        String valueToSelect,
+        WebDriver driver
+) throws InterruptedException {
+
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    Thread.sleep(300); // Let any overlay settle
 
-    // 1. Click the dropdown to open options
-    wait.until(ExpectedConditions.elementToBeClickable(dropdownClickElement)).click();
+    // Step 1: Open dropdown safely
+    try {
+        wait.until(ExpectedConditions.elementToBeClickable(dropdownClickElement)).click();
+    } catch (ElementClickInterceptedException e) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", dropdownClickElement);
+    }
 
-    // 2. Type the value to search
-    wait.until(ExpectedConditions.elementToBeClickable(searchInputElement)).sendKeys(valueToSelect);
-    Thread.sleep(200);
+    // Step 2: Search inside dropdown
+    WebElement input = wait.until(ExpectedConditions.elementToBeClickable(searchInputElement));
+    input.clear();
+    input.sendKeys(valueToSelect.trim());
+    Thread.sleep(500); // Let matching options load
 
-    // Locate and click exact matching option
+    // Step 3: Build dynamic locator
     By optionLocator = By.xpath("//li[contains(@class,'p-dropdown-item') and @aria-label='" + valueToSelect.trim() + "']");
-    wait.until(ExpectedConditions.elementToBeClickable(optionLocator)).click();
 
+    // Step 4: Try clicking the desired option (JS fallback included)
+    try {
+        wait.until(driver1 -> {
+            try {
+                List<WebElement> options = driver1.findElements(optionLocator);
+                for (WebElement option : options) {
+                    if (option.isDisplayed() && option.isEnabled()) {
+                        try {
+                            option.click();
+                        } catch (ElementClickInterceptedException e) {
+                            ((JavascriptExecutor) driver1).executeScript("arguments[0].click();", option);
+                        }
+                        return true;
+                    }
+                }
+                return false; // Retry if not clickable
+            } catch (StaleElementReferenceException e) {
+                return false; // Retry if stale
+            }
+        });
+    } catch (TimeoutException e) {
+        throw new NoSuchElementException("Option '" + valueToSelect + "' not found or not clickable using locator: " + optionLocator);
+    }
 }
 
-public static void searchAndSelectFromMultiDropdown(
+
+
+
+
+    public static void searchAndSelectFromMultiDropdown(
         WebElement dropdownClickElement,
         By searchInputLocator,
         String[] valuesToSelect,
@@ -102,38 +165,99 @@ public static void searchAndSelectFromMultiDropdown(
 
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-    System.out.println("Total values to select: " + valuesToSelect.length);
-
     for (String value : valuesToSelect) {
         boolean selected = false;
         int attempts = 0;
 
-        while (!selected && attempts < 2) {
+        while (!selected && attempts < 3) {
             try {
-                // Click to open the dropdown
+                // Step 1: Click dropdown
                 wait.until(ExpectedConditions.elementToBeClickable(dropdownClickElement)).click();
-                Thread.sleep(200); // slight delay to avoid DOM lag
+                Thread.sleep(300);
 
-                // Type the value
+                // Step 2: Search
                 WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(searchInputLocator));
                 input.clear();
                 input.sendKeys(value.trim());
+                Thread.sleep(500); // Let options render
 
-                // Click matching option
-                By optionLocator = By.xpath("//li[contains(@class,'p-multiselect-item') and @aria-label='" + value.trim() + "']");
-                wait.until(ExpectedConditions.elementToBeClickable(optionLocator)).click();
+                // Step 3: Locate matching options (by aria-label or visible text)
+                List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                        By.xpath("//li[contains(@class,'p-multiselect-item') and not(contains(@class,'p-disabled'))]")
+                ));
 
-                System.out.println("✅ Clicked on: " + value.trim());
-                selected = true;
-            } catch (TimeoutException e) {
-                System.out.println("⏳ Retrying to open dropdown for: " + value.trim());
+                for (WebElement option : options) {
+                    String label = option.getAttribute("aria-label").trim();
+                    if (label.equalsIgnoreCase(value.trim())) {
+                        // Scroll and click
+                        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", option);
+                        Thread.sleep(200);
+
+                        try {
+                            option.click();
+                        } catch (ElementClickInterceptedException e) {
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", option);
+                        }
+
+                        selected = true;
+                        break;
+                    }
+                }
+
+                if (!selected) {
+                    throw new NoSuchElementException("Value not found in dropdown: " + value);
+                }
+
+            } catch (StaleElementReferenceException | TimeoutException e) {
                 attempts++;
+                Thread.sleep(300); // slight delay before retry
             }
         }
 
         if (!selected) {
-            System.out.println("❌ Failed to select: " + value.trim());
+            throw new NoSuchElementException("Failed to select dropdown value: " + value);
         }
+    }
+}
+
+
+public static void searchAndSelectFromSingleDropdown(
+        WebElement dropdownClickElement,
+        By searchInputLocator,
+        String userInput,
+        String optionTextToMatch,
+        WebDriver driver) throws InterruptedException {
+
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    boolean selected = false;
+    int attempts = 0;
+
+    while (!selected && attempts < 2) {
+        try {
+            // Open dropdown
+            wait.until(ExpectedConditions.elementToBeClickable(dropdownClickElement)).click();
+            Thread.sleep(200); // minor delay
+
+            // Type into search input
+            WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(searchInputLocator));
+            input.clear();
+            input.sendKeys(userInput);
+
+            // Dynamic option locator (you can modify class as needed)
+            String dynamicXpath = String.format("//li[contains(@class,'p-dropdown-item') and @aria-label='%s']", optionTextToMatch);
+            By optionLocator = By.xpath(dynamicXpath);
+
+            // Wait and click on matching option
+            wait.until(ExpectedConditions.elementToBeClickable(optionLocator)).click();
+            selected = true;
+
+        } catch (TimeoutException e) {
+            attempts++;
+        }
+    }
+
+    if (!selected) {
+        throw new TimeoutException("Could not select: " + optionTextToMatch);
     }
 }
 

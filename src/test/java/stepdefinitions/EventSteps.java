@@ -22,30 +22,25 @@ public class EventSteps {
     public void i_click_on_the_create_event_button(String buttonName) throws InterruptedException {
         eventPage.clickCreateEventButton();
         Thread.sleep(300);
-
     }
 
     @And("I enter event title as {string}")
     public void i_enter_event_title(String title) throws InterruptedException {
         eventPage.enterEventTitle(title);
         Thread.sleep(100);
-
     }
 
     @And("I select job role as {string}")
     public void i_select_job_role(String roles) throws InterruptedException {
-    // Split by comma and trim spaces
     String[] roleArray = roles.split(",");
     for (String role : roleArray) {
         eventPage.selectJobRole(role.trim());
     }
 }
 
-
     @And("I select institution Name as {string}")
     public void i_select_institution_name(String name) throws InterruptedException {
         eventPage.selectInstitutionName(name);
-
     }
 
     @And("I enter institution address as {string}")
@@ -57,8 +52,6 @@ public class EventSteps {
     public void i_select_event_start_date_as(String dateTime) throws InterruptedException {
         DateTimePickerUtils.parseAndSelectDate(eventPage::selectEventStartDate, dateTime);
     }
-
-
 
     @And("I select event end date as {string}")
     public void i_select_event_end_date(String dateTime) throws InterruptedException {
@@ -75,7 +68,6 @@ public class EventSteps {
         DateTimePickerUtils.parseAndSelectDate(eventPage::selectRegistrationEndDate, endDate);
     }
     
-
     @And("I enter work experience as {string}")
     public void i_enter_work_experience(String experience) {
         eventPage.enterWorkExperience(experience);
@@ -89,7 +81,6 @@ public class EventSteps {
     @And("I enter maximum salary as {string}")
     public void i_enter_maximum_salary(String maxSalary) throws InterruptedException {
         eventPage.enterMaxSalary(maxSalary);
-
     }
 
     @And("I select registration form as {string}")
@@ -105,20 +96,17 @@ public class EventSteps {
     @And("I select event category as {string}")
     public void i_select_event_category(String category) throws InterruptedException {
         eventPage.selectEventCategory(category);
-
     }
 
     @And("I select event type as {string}")
     public void i_select_event_type(String type) throws InterruptedException {
         eventPage.selectEventType(type);
-
     }
 
     @And("I submit the event")
     public void i_submit_event() throws InterruptedException {
         eventPage.clickSave();
-                Thread.sleep(200);
-
+        Thread.sleep(200);
     }
 
     @Then("I should see event created successfully message")
@@ -128,8 +116,10 @@ public class EventSteps {
 
     @Then("I search and verify event {string} is visible")
     public void i_search_and_verify_event_is_visible(String eventName) throws InterruptedException {
+        Thread.sleep(200);
+
         eventPage.searchEvent(eventName);
-        Thread.sleep(3000);
+        Thread.sleep(200);
         Assert.assertTrue("Event not found in list!", eventPage.isEventDisplayedInTable(eventName));
     }
 
@@ -137,6 +127,13 @@ public class EventSteps {
     public void i_select_items_per_page(String count) throws InterruptedException {
         eventPage.selectItemsPerPage(count);
     }
+
+    @Then("I click on event {string}")
+    public void searchAndClickEvent(String eventName) throws InterruptedException {
+    // Assume you already typed in search box
+    eventPage.searchEvent(eventName);
+    eventPage.clickEvent(eventName);
+}
 
 
 }

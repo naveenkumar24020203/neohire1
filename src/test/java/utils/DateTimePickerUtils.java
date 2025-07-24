@@ -13,59 +13,92 @@ import java.util.Locale;
 
 public class DateTimePickerUtils {
 
-    public static void selectDateTime(WebDriver driver, By triggerLocator,
-                                      String year, String month, String day,
-                                      int targetHour, int targetMinute, String targetAmPm) throws InterruptedException {
+public static void selectDateTime(WebDriver driver, By triggerLocator,
+                                  String year, String month, String day,
+                                  int targetHour, int targetMinute, String targetAmPm) throws InterruptedException {
 
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-    // ========== STEP 1: Click trigger ==========
+    // STEP 1: Open date-time picker
     WebElement calendarTrigger = wait.until(ExpectedConditions.elementToBeClickable(triggerLocator));
     calendarTrigger.click();
-    Thread.sleep(1000);
-    // ========== STEP 2: SET TIME ==========
-    WebElement hourContainer = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".p-hour-picker")));
-    WebElement hourSpan = hourContainer.findElement(By.xpath(".//span"));
+    Thread.sleep(800);
 
-    // Wait until hourSpan text is not empty
-    wait.until(driver1 -> !hourSpan.getText().trim().isEmpty());
+    // STEP 2: Select YEAR
+    WebElement yearButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.p-datepicker-year")));
+    yearButton.click();
+    Thread.sleep(300);
 
-    int currentHour = Integer.parseInt(hourSpan.getText().trim());
+    int targetYear = Integer.parseInt(year);
+    while (true) {
+        List<WebElement> yearElements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+            By.cssSelector("span.p-yearpicker-year")));
 
-
-    while (currentHour != targetHour) {
-        if (targetHour > currentHour) {
-            hourContainer.findElement(By.xpath(".//button[@aria-label='Next Hour']")).click();
-            Thread.sleep(50);
-
-        } else {
-            hourContainer.findElement(By.xpath(".//button[@aria-label='Previous Hour']")).click();
-            Thread.sleep(50);
-
+        boolean found = false;
+        for (WebElement yearEl : yearElements) {
+            String rawText = (String) ((JavascriptExecutor) driver)
+                .executeScript("return arguments[0].textContent;", yearEl);
+            java.util.regex.Matcher m = Pattern.compile("\\b(\\d{4})\\b").matcher(rawText);
+            if (m.find() && m.group(1).equals(String.valueOf(targetYear))) {
+                yearEl.click();
+                Thread.sleep(150);
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("span.p-monthpicker-month")));
+                found = true;
+                break;
+            }
         }
-        wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(hourSpan, String.valueOf(currentHour))));
-        currentHour = Integer.parseInt(hourSpan.getText().trim());
+
+        if (found) break;
+
+        String firstYearText = (String) ((JavascriptExecutor) driver)
+            .executeScript("return arguments[0].textContent;", yearElements.get(0));
+        java.util.regex.Matcher firstMatch = Pattern.compile("\\b(\\d{4})\\b").matcher(firstYearText);
+        int firstYear = firstMatch.find() ? Integer.parseInt(firstMatch.group(1)) : 0;
+
+        By navBtn = (targetYear < firstYear) ? By.cssSelector("button.p-datepicker-prev") : By.cssSelector("button.p-datepicker-next");
+        wait.until(ExpectedConditions.elementToBeClickable(navBtn)).click();
+        Thread.sleep(400);
     }
 
-    WebElement minuteContainer = driver.findElement(By.cssSelector(".p-minute-picker"));
-    WebElement minuteSpan = minuteContainer.findElement(By.xpath(".//span"));
-    int currentMinute = Integer.parseInt(minuteSpan.getText().trim());
+    // STEP 3: Select MONTH
+    String[] shortMonths = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    String targetMonthShort = month.matches("\\d+")
+        ? shortMonths[Integer.parseInt(month) - 1]
+        : month;
 
-    while (currentMinute != targetMinute) {
-        if (targetMinute > currentMinute) {
-            minuteContainer.findElement(By.xpath(".//button[@aria-label='Next Minute']")).click();
-            Thread.sleep(50);
-
-        } else {
-            minuteContainer.findElement(By.xpath(".//button[@aria-label='Previous Minute']")).click();
-            Thread.sleep(50);
-
+    List<WebElement> months = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+        By.cssSelector("span.p-monthpicker-month")));
+    for (WebElement m : months) {
+        if (m.getText().trim().equalsIgnoreCase(targetMonthShort)) {
+            m.click();
+            Thread.sleep(100);
+            break;
         }
-        wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(minuteSpan, String.valueOf(currentMinute))));
-        currentMinute = Integer.parseInt(minuteSpan.getText().trim());
     }
 
-    WebElement amPmContainer = driver.findElement(By.cssSelector(".p-ampm-picker"));
+    // STEP 4: Select DATE (this will CLOSE the calendar)
+    List<WebElement> dayCells = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+        By.cssSelector("table.p-datepicker-calendar td")));
+    for (WebElement cell : dayCells) {
+        String cellClass = cell.getAttribute("class");
+        if (cellClass.contains("p-datepicker-other-month") || cellClass.contains("p-disabled")) continue;
+
+        WebElement span = cell.findElement(By.tagName("span"));
+        if (span.getText().trim().equals(day)) {
+            span.click(); // Will close the picker
+            Thread.sleep(300);
+            break;
+        }
+    }
+
+    // STEP 5: REOPEN picker to set time
+    calendarTrigger = wait.until(ExpectedConditions.elementToBeClickable(triggerLocator));
+    calendarTrigger.click();
+    Thread.sleep(700);
+
+    // STEP 6: Set AM/PM
+    WebElement amPmContainer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".p-ampm-picker")));
     WebElement amPmSpan = amPmContainer.findElement(By.xpath(".//span"));
     String currentAmPm = amPmSpan.getText().trim().toUpperCase();
     String targetUpper = targetAmPm.toUpperCase();
@@ -75,143 +108,43 @@ public class DateTimePickerUtils {
         wait.until(ExpectedConditions.textToBePresentInElement(amPmSpan, targetUpper));
     }
 
-    // ========== STEP 3: SELECT YEAR ==========
-    WebElement yearButton = wait.until(ExpectedConditions.elementToBeClickable(
-        By.cssSelector("button.p-datepicker-year")
-    ));
-    yearButton.click();
-    Thread.sleep(500);
+    // STEP 7: Set HOUR
+    WebElement hourContainer = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".p-hour-picker")));
+    WebElement hourSpan = hourContainer.findElement(By.xpath(".//span"));
+    wait.until(driver1 -> !hourSpan.getText().trim().isEmpty());
+    int currentHour = Integer.parseInt(hourSpan.getText().trim());
 
-
-
-int targetYear = Integer.parseInt(year); 
-
-
-
-// ========== STEP 3: SELECT YEAR ==========
-while (true) {
-    // Refetch year elements each time to avoid stale reference
-    List<WebElement> yearElements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-        By.cssSelector("span.p-yearpicker-year")
-    ));
-
-    boolean found = false;
-    for (WebElement yearEl : yearElements) {
-        // Use JavaScript to get raw textContent (handles nested spans or duplicates)
-        String rawText = (String) ((JavascriptExecutor) driver)
-            .executeScript("return arguments[0].textContent;", yearEl);
-
-        // Extract first 4-digit number using regex
-        String cleaned = "";
-        java.util.regex.Matcher m = Pattern.compile("\\b(\\d{4})\\b").matcher(rawText);
-        if (m.find()) {
-            cleaned = m.group(1);
+    while (currentHour != targetHour) {
+        if (targetHour > currentHour) {
+            hourContainer.findElement(By.xpath(".//button[@aria-label='Next Hour']")).click();
+        } else {
+            hourContainer.findElement(By.xpath(".//button[@aria-label='Previous Hour']")).click();
         }
+        Thread.sleep(50);
+        wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(hourSpan, String.valueOf(currentHour))));
+        currentHour = Integer.parseInt(hourSpan.getText().trim());
+    }
 
-        // System.out.print("[" + cleaned + "] ");
+    // STEP 8: Set MINUTE
+    WebElement minuteContainer = driver.findElement(By.cssSelector(".p-minute-picker"));
+    WebElement minuteSpan = minuteContainer.findElement(By.xpath(".//span"));
+    int currentMinute = Integer.parseInt(minuteSpan.getText().trim());
 
-        // If match, click the year and break
-        if (cleaned.equals(String.valueOf(targetYear))) {
-            yearEl.click();
-            Thread.sleep(150);
-
-            // Confirm month picker is visible
-            wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("span.p-monthpicker-month")
-            ));
-            found = true;
-            break;
+    while (currentMinute != targetMinute) {
+        if (targetMinute > currentMinute) {
+            minuteContainer.findElement(By.xpath(".//button[@aria-label='Next Minute']")).click();
+        } else {
+            minuteContainer.findElement(By.xpath(".//button[@aria-label='Previous Minute']")).click();
         }
+        Thread.sleep(50);
+        wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(minuteSpan, String.valueOf(currentMinute))));
+        currentMinute = Integer.parseInt(minuteSpan.getText().trim());
     }
 
-    if (found) break;
-
-    // Retry: Navigate to next/prev decade
-    // Get clean numeric value from first year in view
-    String firstYearText = (String) ((JavascriptExecutor) driver)
-        .executeScript("return arguments[0].textContent;", yearElements.get(0));
-    java.util.regex.Matcher firstMatch = Pattern.compile("\\b(\\d{4})\\b").matcher(firstYearText);
-    int firstYear = firstMatch.find() ? Integer.parseInt(firstMatch.group(1)) : 0;
-
-
-    if (targetYear < firstYear) {
-        WebElement prevBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("button.p-datepicker-prev")
-        ));
-        prevBtn.click();
-    } else {
-        WebElement nextBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("button.p-datepicker-next")
-        ));
-        nextBtn.click();
-    }
-
-    Thread.sleep(400); // Give time for next decade to load
-}
-
-                                      
-
-
-
-String targetMonthShort;
-
-if (month.matches("\\d+")) {
-    int monthNumber = Integer.parseInt(month);
-    if (monthNumber < 1 || monthNumber > 12) {
-        throw new IllegalArgumentException("❌ Invalid month number: " + monthNumber);
-    }
-
-    String[] shortMonths = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-    targetMonthShort = shortMonths[monthNumber - 1];
-} else {
-    targetMonthShort = month;
-}
-
-// ========== STEP 4: SELECT MONTH ==========
-List<WebElement> months = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-    By.cssSelector("span.p-monthpicker-month")
-));
-// for (WebElement m : months) {
-//     System.out.println("    ➜ " + m.getText().trim());
-// }
-
-boolean found = false;
-for (WebElement m : months) {
-    if (m.getText().trim().equalsIgnoreCase(targetMonthShort)) {
-        m.click();
-        Thread.sleep(100); // optional delay
-        found = true;
-        break;
-    }
-}
-
-if (!found) {
-    throw new NoSuchElementException("❌ Month '" + targetMonthShort + "' not found in the calendar UI.");
+    Thread.sleep(500); // Final settle
 }
 
 
-    // ========== STEP 5: SELECT DATE ==========
-    List<WebElement> dayCells = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-        By.cssSelector("table.p-datepicker-calendar td")
-    ));
-
-    for (WebElement cell : dayCells) {
-        String cellClass = cell.getAttribute("class");
-
-        if (cellClass.contains("p-datepicker-other-month") || cellClass.contains("p-disabled")) {
-            continue;
-        }
-
-        WebElement span = cell.findElement(By.tagName("span"));
-        if (span.getText().trim().equals(day)) {
-            span.click();
-            Thread.sleep(150);
-
-            break;
-        }
-    }
-}
 
 public static void parseAndSelectDate(SelectDateFunction dateFunction, String dateTime) throws InterruptedException {
 
