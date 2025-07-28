@@ -1,84 +1,36 @@
-Feature: Create New Event
+Feature: Event Page scenarios
 
     
-@event
+@eventCreate
+Scenario Outline: Successfully create a new event of different types
+  Given I am on the Event page
+  And I select "100" items per page in the event table
+  When I click on the "New Event" button on Event page
+  And I enter event title as "<eventTitle>"
+  And I select event start date as "<eventStart>"
+  And I select event end date as "<eventEnd>"
+  And I select registration start date as "<regStart>"
+  And I select registration end date as "<regEnd>"
+  And I select job role as "<jobRoles>"
+  And I enter work experience as "<experience>"
+  And I enter minimum salary as "<minSalary>"
+  And I enter maximum salary as "<maxSalary>"
+  And I select event type as "<eventType>"
+  And I select event category as "<eventCategory>"
+  And I select email template as "<emailTemplate>"
+  And I select registration form as "<registrationForm>"
+  And I select institution Name as "<institutionName>"
+  And I enter institution address as "<institutionAddress>"
+  And I submit the event
+  Then I should see event created successfully message
+  Then I search and verify event "<eventTitle>" is visible
 
-  Scenario: Successfully create a new event in In-campus type
-  # multiple institute select
-    Given I am on the Event page
-    And I select "100" items per page in the event table
-    When I click on the "New Event" button on Event page
-    And I enter event title as "GG Campus Drive 2808"
-    And I select event start date as "2025-08-28 12:30 PM"
-    And I select event end date as "2025-08-29 12:00 PM"
-    And I select registration start date as "2025-08-26 12:00 PM"
-    And I select registration end date as "2025-08-27 12:00 PM"
-    And I select job role as "QA Engineer, QC Engineer"   
-    And I enter work experience as "2"
-    And I enter minimum salary as "300000"
-    And I enter maximum salary as "600000"
-    And I select event type as "In-Campus"
-    And I select event category as "Technical"
-    And I select email template as "Test Link"
-    And I select registration form as "demo Copy"
-    And I select institution Name as "AAA COLLEGE OF ENGINEERING AND TECHNOLOGY,  SIR VISHVESHWARIAH INSTITUE OF SCIENCE AND TECHNOLOGY "
-    And I enter institution address as "Addressssssssss"
-    And I submit the event
-    Then I should see event created successfully message
-    Then I search and verify event "GG Campus Drive 2808" is visible
+Examples:
+  | eventTitle           | eventStart           | eventEnd             | regStart            | regEnd              | jobRoles                  | experience | minSalary | maxSalary | eventType     | eventCategory | emailTemplate | registrationForm | institutionName                                                                                     | institutionAddress           |
+  | GG Campus Drive 280804 | 2025-08-28 12:30 PM  | 2025-08-29 12:00 PM  | 2025-08-26 12:00 PM | 2025-08-27 12:00 PM | QA Engineer, QC Engineer | 2          | 300000    | 600000    | In-Campus     | Technical     | Test Link     | demo Copy        | AAA COLLEGE OF ENGINEERING AND TECHNOLOGY,  SIR VISHVESHWARIAH INSTITUE OF SCIENCE AND TECHNOLOGY | Addressssssssss             |
+  | GG Campus Drive 280805   | 2025-08-28 10:00 AM  | 2025-08-29 04:00 PM  | 2025-08-26 10:00 AM | 2025-08-27 04:00 PM | QA Engineer, QC Engineer | 2          | 250000    | 500000    | Face to Face  | Technical     | Test Link     | demo Copy        | AAA COLLEGE OF ENGINEERING AND TECHNOLOGY                                                          | Face to face venue address  |
+  | GG Campus Drive 280806   | 2025-08-27 12:30 PM  | 2025-08-28 12:00 PM  | 2025-08-25 12:00 PM | 2025-08-26 12:00 PM | QA Engineer              | 2          | 300000    | 600000    | Test          | Technical     | Test Link     | demo Copy        |                                                                                                    |                              |
 
-
-@event
-
-  Scenario: Successfully create a new event in Face to Face type
-  # 1 institute select
-    Given I am on the Event page
-    And I select "100" items per page in the event table
-    When I click on the "New Event" button on Event page
-    And I enter event title as "GG Campus Drive 33"
-    And I select event start date as "2025-07-28 10:00 AM"
-    And I select event end date as "2025-07-29 04:00 PM"
-    And I select registration start date as "2025-07-26 10:00 AM"
-    And I select registration end date as "2025-07-27 04:00 PM"
-    And I select job role as "QA Engineer, QC Engineer"
-    And I enter work experience as "1"
-    And I enter minimum salary as "250000"
-    And I enter maximum salary as "500000"
-    And I select event type as "Face to Face"
-    And I select event category as "Technical"
-    And I select registration form as "demo Copy"
-    And I select email template as "Test Link"
-    And I select institution Name as "AAA COLLEGE OF ENGINEERING AND TECHNOLOGY"
-    And I enter institution address as "Face to face venue address"
-    And I submit the event
-    Then I should see event created successfully message
-    Then I search and verify event "GG Campus Drive 33" is visible
-
-
-@event
-
-  Scenario: Successfully create a new event in Test type
-  # institute optional
-    Given I am on the Event page
-    And I select "100" items per page in the event table
-    When I click on the "New Event" button on Event page
-    And I enter event title as "GG Campus Drive 34"
-    And I select event start date as "2025-07-27 12:30 PM"
-    And I select event end date as "2025-07-28 12:00 PM"
-    And I select registration start date as "2025-07-25 12:00 PM"
-    And I select registration end date as "2025-07-26 12:00 PM"
-    And I select job role as "QA Engineer"
-    # QC Engineer
-    And I select event category as "Technical"
-    And I enter work experience as "2"
-    And I enter minimum salary as "300000"
-    And I enter maximum salary as "600000"
-    And I select event type as "Test"
-    And I select registration form as "demo Copy"
-    And I select email template as "Test Link"
-    And I submit the event
-    Then I should see event created successfully message
-    Then I search and verify event "GG Campus Drive 34" is visible
 
 
 
@@ -87,7 +39,16 @@ Feature: Create New Event
     # delete am event
     Given I am on the Event page
     And I select "100" items per page in the event table
-    Then I search and verify event "ddd" is visible
-    And I delete the event named "ddd"
-    Then I search and verify event "ddd" is not visible
+    Then I search and verify event "<deleteEventTitle>" is visible
+    And I delete the event named "<deleteEventTitle>"
+    Then I search and verify event "<deleteEventTitle>" is not visible
 
+Examples:
+
+| deleteEventTitle |
+| GG Campus Drive 280801 |
+| GG Campus Drive 280802 |
+| GG Campus Drive 280803 |
+| GG Campus Drive 280804 |
+| GG Campus Drive 280805 |
+| GG Campus Drive 280806 |

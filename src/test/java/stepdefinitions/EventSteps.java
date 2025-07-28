@@ -40,13 +40,22 @@ public class EventSteps {
 
     @And("I select institution Name as {string}")
     public void i_select_institution_name(String name) throws InterruptedException {
+        if (name == null || name.trim().isEmpty()) {
+            System.out.println("⚠️ Skipping institution name selection (no input provided).");
+            return;
+        }
         eventPage.selectInstitutionName(name);
     }
 
     @And("I enter institution address as {string}")
     public void i_enter_institution_address(String address) throws InterruptedException {
+        if (address == null || address.trim().isEmpty()) {
+            System.out.println("⚠️ Skipping institution address entry (no input provided).");
+            return;
+        }
         eventPage.enterInstitutionAddress(address);
     }
+
 
     @And("I select event start date as {string}")
     public void i_select_event_start_date_as(String dateTime) throws InterruptedException {
@@ -116,10 +125,10 @@ public class EventSteps {
 
     @Then("I search and verify event {string} is visible")
     public void i_search_and_verify_event_is_visible(String eventName) throws InterruptedException {
-        Thread.sleep(200);
+        Thread.sleep(400);
 
         eventPage.searchEvent(eventName);
-        Thread.sleep(200);
+        Thread.sleep(500);
         Assert.assertTrue("Event not found in list!", eventPage.isEventDisplayedInTable(eventName));
     }
 
@@ -136,17 +145,20 @@ public class EventSteps {
 }
 
 @Then("I search and verify event {string} is not visible")
-    public void i_search_and_verify_event_is_not_visible(String eventName) throws InterruptedException {
-        Thread.sleep(200);
+public void i_search_and_verify_event_is_not_visible(String eventName) throws InterruptedException {
+    Thread.sleep(400);
+    eventPage.searchEvent(eventName);
+    Thread.sleep(400);
+    
+    boolean isVisible = eventPage.isEventDisplayedInTable(eventName);
+    Assert.assertFalse("❌ Event '" + eventName + "' was found in the list, but it should not be.", isVisible);
+}
 
-        eventPage.searchEvent(eventName);
-        Thread.sleep(200);
-        Assert.assertFalse("Event not found in list!", eventPage.isEventDisplayedInTable(eventName));
-    }
 
     @Then("I delete the event named {string}")
-public void i_delete_the_event_named(String eventName) {
+public void i_delete_the_event_named(String eventName) throws InterruptedException {
     // Write code here that turns the phrase above into concrete actions
+    Thread.sleep(500);
     eventPage.deleteEvent(eventName);
 }
 
