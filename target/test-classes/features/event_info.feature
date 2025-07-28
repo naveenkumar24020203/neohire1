@@ -75,10 +75,12 @@ Scenario: Checking navigation to all tabs inside event details
   And I navigate to "Stages" tab in the event
   And I select "100" items per page in the Stages candidate list
   When I search and select candidate with email "naveen@examly.in"
-  # Then the candidate should be selected
+  # When I select all candidates in the table
 
-  @selectCandidates1
-  Scenario: Select all candidates in the table
-    Given I am on the candidate table page
-    When I select all candidates in the table
-    # Then all candidates should be selected
+@tabnav3
+Scenario: Checking navigation to all tabs inside event details
+  Given I am inside the event page for "July Campus Drive 9"
+  And I navigate to "Stages" tab in the event
+  And I click on "ssss" stage 
+  And In "ssss" stage I click on "Rename" option
+  And I change the name to "dddd"

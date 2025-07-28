@@ -303,4 +303,51 @@ public void searchCandidateByEmail(String email) {
 }
 
 
+
+
+public void clickStageByName(String stageName) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    // This XPath matches the <p> tag containing the exact visible stage name before the <span>
+    String xpath = "//div[contains(@class,'stage')]//p/text()[normalize-space(.)='" + stageName + "']/parent::*";
+
+    WebElement stage = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+    stage.click();
+}
+
+
+public void clickStageMenuOption(String stageName, String option) throws InterruptedException {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    // 1. Open the menu
+    String menuXpath = "//div[contains(@class,'stages-list')]//div[contains(@class,'stage') and .//p[contains(normalize-space(),'" + stageName + "')]]//em[contains(@class,'stageOptions')]";
+    WebElement menuIcon = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(menuXpath)));
+    menuIcon.click();
+
+    // 2. Click the desired option from popup
+    String optionXpath = "//p[contains(@class,'stageOptions-overlay') and normalize-space()='" + option + "']";
+    WebElement optionElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(optionXpath)));
+    optionElement.click();
+Thread.sleep(300);
+}
+
+public void renameStage( String newName) throws InterruptedException {
+
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    // 1. Wait for the input field with placeholder 'Rename'
+    WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.xpath("//input[@placeholder='Rename']")));
+    input.clear();
+    input.sendKeys(newName);
+Thread.sleep(500);
+    // 2. Click the ✓ tick icon (first <em>)
+    WebElement tickIcon = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//em[contains(@class, 'pi-check') and contains(@class, 'rename-action_icon')]")));
+    tickIcon.click();
+    Thread.sleep(2000);
+
+}
+
+
 }
