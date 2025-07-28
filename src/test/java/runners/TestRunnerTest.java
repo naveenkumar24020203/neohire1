@@ -10,11 +10,13 @@ import org.junit.runner.RunWith;
     glue = {"stepdefinitions", "hooks"},
     plugin = {
         "pretty",                              
-        "summary",                             
+        "summary",     
+        "json:target/cucumber.json",
+        "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
         "html:target/cucumber-report.html",    
     },
     monochrome = true,
-    tags = "@eventDelete" //@event, tabnav, selectCandidates
+    tags = "@eventDelete" //@event, tabnav, selectCandidates, eventDelete, eventCreate
 )
 
 public class TestRunnerTest {
