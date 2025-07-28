@@ -4,6 +4,7 @@ import base.BaseTest;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -107,5 +108,30 @@ public void iShouldSeeSuccessMessageForStageCreation() {
     Assert.assertTrue("Stage creation success message not visible", eventInfoPage.isStageCreatedSuccessfully());
 }
 
+@And("I select {string} items per page in the Stages candidate list")
+    public void i_select_items_per_table(String count) throws InterruptedException {
+        eventPage.selectItemsPerPage(count);
+        Thread.sleep(500);
+    }
+
+@When("I search and select candidate with email {string}")
+public void iSearchAndSelectCandidateWithEmail(String email) throws InterruptedException {
+    eventInfoPage.searchCandidateByEmail(email);
+    Thread.sleep(1000);
+    eventInfoPage.selectCandidateByEmail(email);
+}
+
+@Then("the candidate should be selected")
+public void theCandidateShouldBeSelected() {
+    // Optional: assertion logic or just log
+    System.out.println("✅ Candidate is selected.");
+}
+
+
+@When("I select all candidates in the table")
+public void iSelectAllCandidatesInTheTable() {
+    EventInfoPage eventInfoPage = new EventInfoPage(driver);
+    eventInfoPage.selectAllCandidates();
+}
 
 }

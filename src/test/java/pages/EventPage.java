@@ -98,7 +98,8 @@ public class EventPage {
     @FindBy(css = "span[role='combobox']")
     private WebElement itemsPerPageDropdown;
 
-
+    @FindBy(xpath = "//button[normalize-space()='Delete Event']")
+    private WebElement deleteEventButton;
     // ---------- ACTIONS ----------
 
     public void navigateToEventsPage() {
@@ -298,6 +299,35 @@ public boolean isEventCreatedSuccessfully() {
 
     WebElement eventCell = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
     eventCell.click();
+}
+
+
+public void deleteEvent(String eventName) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    // Select the checkbox for the event
+    ElementUtils.selectEventCheckboxByName(eventName, driver);
+
+    // Wait and click Delete button
+    wait.until(ExpectedConditions.elementToBeClickable(deleteEventButton)).click();
+    // Wait and click Confirm button in confirmation popup
+    // WebElement confirmDelete = wait.until(ExpectedConditions.elementToBeClickable(
+    //     By.xpath("//button[normalize-space()='Confirm']")
+    // ));
+    // confirmDelete.click();
+}
+
+
+
+public void cloneEvent(String eventName) {
+    ElementUtils.selectEventCheckboxByName(eventName, driver);
+
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    WebElement cloneBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[normalize-space()='Clone']")));
+    cloneBtn.click();
+
+    WebElement confirmClone = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[normalize-space()='Confirm']")));
+    confirmClone.click();
 }
 
 }

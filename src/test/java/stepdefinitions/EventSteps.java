@@ -135,5 +135,19 @@ public class EventSteps {
     eventPage.clickEvent(eventName);
 }
 
+@Then("I search and verify event {string} is not visible")
+    public void i_search_and_verify_event_is_not_visible(String eventName) throws InterruptedException {
+        Thread.sleep(200);
+
+        eventPage.searchEvent(eventName);
+        Thread.sleep(200);
+        Assert.assertFalse("Event not found in list!", eventPage.isEventDisplayedInTable(eventName));
+    }
+
+    @Then("I delete the event named {string}")
+public void i_delete_the_event_named(String eventName) {
+    // Write code here that turns the phrase above into concrete actions
+    eventPage.deleteEvent(eventName);
+}
 
 }

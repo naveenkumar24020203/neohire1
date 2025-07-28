@@ -53,3 +53,32 @@ Scenario: Create Others stage
   And I create a "Others" stage named "Others"
   Then I should see a success message for stage creation
 
+@tabnav1
+Scenario: Checking navigation to all tabs inside event details
+  Given I am inside the event page for "July Campus Drive 13"
+  And I navigate to "Candidates" tab in the event
+  And I navigate to "Event Details" tab in the event
+  And I navigate to "Stages" tab in the event
+  And I navigate to "Interview" tab in the event
+
+
+@tabnav2
+Scenario: Checking navigation to all tabs inside event details
+  Given I am inside the event page for "July Campus Drive 13"
+  And I navigate to "Stages" tab in the event
+  And I select "100" items per page in the Stages candidate list
+
+
+ @selectCandidates
+  Scenario: Select a candidate by email
+  Given I am inside the event page for "July Campus Drive 9"
+  And I navigate to "Stages" tab in the event
+  And I select "100" items per page in the Stages candidate list
+  When I search and select candidate with email "naveen@examly.in"
+  # Then the candidate should be selected
+
+  @selectCandidates1
+  Scenario: Select all candidates in the table
+    Given I am on the candidate table page
+    When I select all candidates in the table
+    # Then all candidates should be selected
