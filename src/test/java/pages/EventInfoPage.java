@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,6 +15,8 @@ import utils.ElementUtils;
 import static utils.ElementUtils.*;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 
 public class EventInfoPage {
@@ -104,6 +107,16 @@ public class EventInfoPage {
     @FindBy(xpath = "//div[text()='Success']")
     private WebElement stageSuccessMsg;
 
+    @FindBy(css = "span[role='combobox']")
+    private WebElement itemsPerPageDropdown;
+
+    @FindBy(xpath = "//input[@placeholder='Search Email']")
+    private WebElement emailSearchInput;
+
+
+
+
+
     
     // Stage Section
     
@@ -113,6 +126,7 @@ public class EventInfoPage {
     WebElement tab = driver.findElement(By.xpath(tabXpath));
     tab.click();
     }
+
 
 
     public void clickAddStage() {
@@ -230,5 +244,63 @@ public boolean isStageCreatedSuccessfully() {
         return false;
     }
 }
+
+
+
+ public void selectItemsPerPage(String visibleText) throws InterruptedException {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    // Click the dropdown to open the options
+    wait.until(ExpectedConditions.elementToBeClickable(itemsPerPageDropdown)).click();
+    Thread.sleep(1000);
+
+    // Wait for options to become visible
+    List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+        By.cssSelector("ul.p-dropdown-items li[role='option']")));
+
+    // Loop and match the visible text exactly
+    for (WebElement option : options) {
+        String optionText = option.getText().trim();
+        if (optionText.equals(visibleText)) {
+            option.click();
+                Thread.sleep(4000);
+
+            return;
+        }
+    }
+
+    throw new NoSuchElementException("Items per page option '" + visibleText + "' not found.");
+
+    }
+
+
+
+
+    public void selectCandidateByEmail(String email) throws InterruptedException {
+    ElementUtils.selectCandidateFromList(driver, email);
+}
+
+    public void selectAllCandidates() {
+    ElementUtils.selectAllCandidates(driver);
+}
+
+
+public void searchCandidateByEmail(String email) {
+    try {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(emailSearchInput));
+
+        emailSearchInput.clear();
+        emailSearchInput.sendKeys(email);
+        emailSearchInput.sendKeys(Keys.ENTER); // If Enter triggers the search
+
+        // Optional: Wait for results to load
+        Thread.sleep(1000); // or use wait for specific result row
+
+    } catch (Exception e) {
+        throw new RuntimeException("❌ Failed to search candidate by email: " + email, e);
+    }
+}
+
 
 }

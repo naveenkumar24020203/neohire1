@@ -263,8 +263,83 @@ public static void searchAndSelectFromSingleDropdown(
 
 
 
+/**
+ * Select checkboxes in the candidate table.
+ * If email is provided, selects the row with that email.
+ * If email is null or empty, selects all candidates.
+ *
+ * @param driver WebDriver instance
+ * @param candidateEmail Email to find the candidate row, or null for all
+ * @throws InterruptedException 
+ */
+public static void selectCandidateFromList(WebDriver driver, String candidateEmail) throws InterruptedException {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(12));
+
+    try {
+        if (candidateEmail == null || candidateEmail.trim().isEmpty()) {
+            // Bulk select all via table header
+            WebElement headerCheckbox = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//thead//div[contains(@class, 'p-checkbox-box')]")));
+            if (!headerCheckbox.isSelected()) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", headerCheckbox);
+            }
+        } else {
+            // Locate the row using the email text
+            String email = candidateEmail.trim();
+            WebElement row = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//tbody/tr[td[contains(string(),'" + email + "')]]")
+            ));
+
+            // Locate the checkbox inside the first <td>
+            WebElement checkbox = row.findElement(By.xpath("//tr//div[contains(@class, 'p-checkbox-box')]"));
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", checkbox);
+            wait.until(ExpectedConditions.elementToBeClickable(checkbox));
+
+            if (!checkbox.isSelected()) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkbox);
+            }
+        }
+
+    } catch (TimeoutException e) {
+        throw new RuntimeException("❌ Timeout: Candidate with email '" + candidateEmail + "' not found.", e);
+    } catch (Exception e) {
+        throw new RuntimeException("❌ Error selecting candidate checkbox: " + e.getMessage(), e);
+    }
+
+    Thread.sleep(300);
+}
 
 
+public static void selectAllCandidates(WebDriver driver) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    try {
+        // Wait for the header checkbox to be clickable
+        WebElement headerCheckbox = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//thead//div[contains(@class, 'p-checkbox-box')]")));
+
+        // If not already selected, click it
+        if (!headerCheckbox.isSelected()) {
+            headerCheckbox.click();
+        }
+
+        // Optional: wait briefly to allow UI update
+        Thread.sleep(1000);
+
+    } catch (Exception e) {
+        throw new RuntimeException("❌ Failed to select all candidates using header checkbox: " + e.getMessage(), e);
+    }
+}
+
+
+
+public static void selectEventCheckboxByName(String eventName, WebDriver driver) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    String checkboxXpath = "(//table//tr[td[contains(normalize-space(),'" + eventName + "')]]//td[1]//div[contains(@class,'p-checkbox')])[2]";
+    WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(checkboxXpath)));
+    checkbox.click();
+}
 
 }
 
