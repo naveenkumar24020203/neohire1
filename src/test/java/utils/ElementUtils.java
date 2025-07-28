@@ -47,10 +47,6 @@ public class ElementUtils {
     });
 }
 
-
-
-
-
     // Select multiple values from multi-select dropdown (like NeoHire tag pickers)
     public void selectMultipleFromDropdown(By containerLocator, List<String> values) {
         WebElement container = driver.findElement(containerLocator);
@@ -102,7 +98,7 @@ public class ElementUtils {
     }
 }
 
-  public static void searchAndSelectFromDropdown(
+    public static void searchAndSelectFromDropdown(
         WebElement dropdownClickElement,
         WebElement searchInputElement,
         String valueToSelect,
@@ -152,9 +148,6 @@ public class ElementUtils {
         throw new NoSuchElementException("Option '" + valueToSelect + "' not found or not clickable using locator: " + optionLocator);
     }
 }
-
-
-
 
 
     public static void searchAndSelectFromMultiDropdown(
@@ -221,7 +214,7 @@ public class ElementUtils {
 }
 
 
-public static void searchAndSelectFromSingleDropdown(
+    public static void searchAndSelectFromSingleDropdown(
         WebElement dropdownClickElement,
         By searchInputLocator,
         String userInput,
@@ -262,17 +255,7 @@ public static void searchAndSelectFromSingleDropdown(
 }
 
 
-
-/**
- * Select checkboxes in the candidate table.
- * If email is provided, selects the row with that email.
- * If email is null or empty, selects all candidates.
- *
- * @param driver WebDriver instance
- * @param candidateEmail Email to find the candidate row, or null for all
- * @throws InterruptedException 
- */
-public static void selectCandidateFromList(WebDriver driver, String candidateEmail) throws InterruptedException {
+    public static void selectCandidateFromList(WebDriver driver, String candidateEmail) throws InterruptedException {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(12));
 
     try {
@@ -311,7 +294,7 @@ public static void selectCandidateFromList(WebDriver driver, String candidateEma
 }
 
 
-public static void selectAllCandidates(WebDriver driver) {
+    public static void selectAllCandidates(WebDriver driver) {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     try {
@@ -333,8 +316,7 @@ public static void selectAllCandidates(WebDriver driver) {
 }
 
 
-
-public static void selectEventCheckboxByName(String eventName, WebDriver driver) {
+    public static void selectEventCheckboxByName(String eventName, WebDriver driver) {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     String checkboxXpath = "(//table//tr[td[contains(normalize-space(),'" + eventName + "')]]//td[1]//div[contains(@class,'p-checkbox')])[2]";
     WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(checkboxXpath)));

@@ -9,7 +9,7 @@ Feature: Login and OTP verification
     Then I should see Events page
 
   Scenario: Login with valid credentials and invalid OTP
-    Given I launch the application
+   Given I launch the application
     When I enter username and password
     And I click the login button
     And I enter OTP "000000"

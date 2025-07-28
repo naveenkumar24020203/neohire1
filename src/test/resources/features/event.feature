@@ -32,16 +32,14 @@ Examples:
   | GG Campus Drive 280806   | 2025-08-27 12:30 PM  | 2025-08-28 12:00 PM  | 2025-08-25 12:00 PM | 2025-08-26 12:00 PM | QA Engineer              | 2          | 300000    | 600000    | Test          | Technical     | Test Link     | demo Copy        |                                                                                                    |                              |
 
 
-
-
-    @eventDelete
-    Scenario: delete a event
-    # delete am event
-    Given I am on the Event page
-    And I select "100" items per page in the event table
-    Then I search and verify event "<deleteEventTitle>" is visible
-    And I delete the event named "<deleteEventTitle>"
-    Then I search and verify event "<deleteEventTitle>" is not visible
+@eventDelete
+Scenario: delete a event
+  # delete am event
+  Given I am on the Event page
+  And I select "100" items per page in the event table
+  Then I search and verify event "<deleteEventTitle>" is visible
+  And I delete the event named "<deleteEventTitle>"
+  Then I search and verify event "<deleteEventTitle>" is not visible
 
 Examples:
 
