@@ -27,6 +27,8 @@ public class ElementUtils {
     // Step 3: Build option locator dynamically
     By optionLocator = By.xpath("//li[@role='option' and normalize-space()='" + valueToSelect + "']");
 
+    //li[@role='option' and normalize-space()='Female']
+
     // Step 4: Try to click, fallback to JS click if intercepted
     wait.until(driver1 -> {
         try {

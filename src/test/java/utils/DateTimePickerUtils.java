@@ -146,6 +146,80 @@ public static void selectDateTime(WebDriver driver, By triggerLocator,
 
 
 
+public static void selectDateOnly(WebDriver driver, By triggerLocator,
+                                  String year, String month, String day) throws InterruptedException {
+
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    // 1. Open the calendar
+    WebElement calendarTrigger = wait.until(ExpectedConditions.elementToBeClickable(triggerLocator));
+    calendarTrigger.click();
+    Thread.sleep(500);
+
+    // 2. Click year dropdown
+    WebElement yearButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.p-datepicker-year")));
+    yearButton.click();
+    Thread.sleep(300);
+
+    int targetYear = Integer.parseInt(year);
+    while (true) {
+        List<WebElement> yearElements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+            By.cssSelector("span.p-yearpicker-year")));
+
+        boolean found = false;
+        for (WebElement yearEl : yearElements) {
+            String rawText = yearEl.getText().trim();
+            if (rawText.equals(String.valueOf(targetYear))) {
+                yearEl.click();
+                found = true;
+                break;
+            }
+        }
+
+        if (found) break;
+
+        int firstYear = Integer.parseInt(yearElements.get(0).getText().trim());
+        By navButton = (targetYear < firstYear)
+                ? By.cssSelector("button.p-datepicker-prev")
+                : By.cssSelector("button.p-datepicker-next");
+
+        wait.until(ExpectedConditions.elementToBeClickable(navButton)).click();
+        Thread.sleep(300);
+    }
+
+    // 3. Select Month
+    String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    String shortMonth = month.matches("\\d+") ? monthNames[Integer.parseInt(month) - 1] : month;
+
+    List<WebElement> months = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+        By.cssSelector("span.p-monthpicker-month")));
+    for (WebElement m : months) {
+        if (m.getText().trim().equalsIgnoreCase(shortMonth)) {
+            m.click();
+            break;
+        }
+    }
+
+    // 4. Select Day
+    List<WebElement> dayCells = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+        By.cssSelector("table.p-datepicker-calendar td")));
+    for (WebElement cell : dayCells) {
+        if (cell.getAttribute("class").contains("p-disabled") || 
+            cell.getAttribute("class").contains("p-datepicker-other-month")) {
+            continue;
+        }
+        WebElement span = cell.findElement(By.tagName("span"));
+        if (span.getText().trim().equals(day)) {
+            span.click();
+            break;
+        }
+    }
+
+    Thread.sleep(300); // optional settle
+}
+
+
 public static void parseAndSelectDate(SelectDateFunction dateFunction, String dateTime) throws InterruptedException {
 
     String[] parts = dateTime.split(" ");

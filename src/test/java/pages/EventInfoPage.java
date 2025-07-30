@@ -114,13 +114,6 @@ public class EventInfoPage {
     private WebElement emailSearchInput;
 
 
-
-
-
-    
-    // Stage Section
-    
-    // Utility actions
     public void clickOnTab(String tabName) {
     String tabXpath = String.format("//button[contains(.,'%s') and contains(@class,'tabs')]", tabName);
     WebElement tab = driver.findElement(By.xpath(tabXpath));
@@ -128,29 +121,9 @@ public class EventInfoPage {
     }
 
 
-
     public void clickAddStage() {
         addStageButton.click();
     }
-
-    // public void selectFirstCandidateCheckbox() {
-    //     driver.findElement(firstCandidateCheckbox).click();
-    // }
-
-    // public void clickMoveStage() {
-    //     driver.findElement(moveStageButton).click();
-    // }
-
-    // public void clickStageByName(String stageName) {
-    //     for (WebElement stage : driver.findElements(stageList)) {
-    //         if (stage.getText().trim().contains(stageName)) {
-    //             stage.click();
-    //             break;
-    //         }
-    //     }
-    // }
-
-
 
     public void createStage(String stageType, String stageName, String dropdownValue, String linkValue) throws InterruptedException {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -235,7 +208,7 @@ public class EventInfoPage {
 }
 
 
-public boolean isStageCreatedSuccessfully() {
+    public boolean isStageCreatedSuccessfully() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     try {
@@ -246,8 +219,7 @@ public boolean isStageCreatedSuccessfully() {
 }
 
 
-
- public void selectItemsPerPage(String visibleText) throws InterruptedException {
+    public void selectItemsPerPage(String visibleText) throws InterruptedException {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     // Click the dropdown to open the options
@@ -274,8 +246,6 @@ public boolean isStageCreatedSuccessfully() {
     }
 
 
-
-
     public void selectCandidateByEmail(String email) throws InterruptedException {
     ElementUtils.selectCandidateFromList(driver, email);
 }
@@ -285,69 +255,66 @@ public boolean isStageCreatedSuccessfully() {
 }
 
 
-public void searchCandidateByEmail(String email) {
-    try {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOf(emailSearchInput));
+    public void searchCandidateByEmail(String email) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOf(emailSearchInput));
 
-        emailSearchInput.clear();
-        emailSearchInput.sendKeys(email);
-        emailSearchInput.sendKeys(Keys.ENTER); // If Enter triggers the search
+            emailSearchInput.clear();
+            emailSearchInput.sendKeys(email);
+            emailSearchInput.sendKeys(Keys.ENTER); // If Enter triggers the search
 
-        // Optional: Wait for results to load
-        Thread.sleep(1000); // or use wait for specific result row
+            // Optional: Wait for results to load
+            Thread.sleep(1000); // or use wait for specific result row
 
-    } catch (Exception e) {
-        throw new RuntimeException("❌ Failed to search candidate by email: " + email, e);
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to search candidate by email: " + email, e);
+        }
     }
-}
+
+    public void clickStageByName(String stageName) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // This XPath matches the <p> tag containing the exact visible stage name before the <span>
+        String xpath = "//div[contains(@class,'stage')]//p/text()[normalize-space(.)='" + stageName + "']/parent::*";
+
+        WebElement stage = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+        stage.click();
+    }
 
 
+    public void clickStageMenuOption(String stageName, String option) throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        // 1. Open the menu
+        String menuXpath = "//div[contains(@class,'stages-list')]//div[contains(@class,'stage') and .//p[contains(normalize-space(),'" + stageName + "')]]//em[contains(@class,'stageOptions')]";
+        WebElement menuIcon = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(menuXpath)));
+        menuIcon.click();
 
-public void clickStageByName(String stageName) {
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // 2. Click the desired option from popup
+        String optionXpath = "//p[contains(@class,'stageOptions-overlay') and normalize-space()='" + option + "']";
+        WebElement optionElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(optionXpath)));
+        optionElement.click();
+    Thread.sleep(300);
+    }
 
-    // This XPath matches the <p> tag containing the exact visible stage name before the <span>
-    String xpath = "//div[contains(@class,'stage')]//p/text()[normalize-space(.)='" + stageName + "']/parent::*";
+    public void renameStage( String newName) throws InterruptedException {
 
-    WebElement stage = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
-    stage.click();
-}
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        // 1. Wait for the input field with placeholder 'Rename'
+        WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@placeholder='Rename']")));
+        input.clear();
+        input.sendKeys(newName);
+    Thread.sleep(500);
+        // 2. Click the ✓ tick icon (first <em>)
+        WebElement tickIcon = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//em[contains(@class, 'pi-check') and contains(@class, 'rename-action_icon')]")));
+        tickIcon.click();
+        Thread.sleep(2000);
 
-public void clickStageMenuOption(String stageName, String option) throws InterruptedException {
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-    // 1. Open the menu
-    String menuXpath = "//div[contains(@class,'stages-list')]//div[contains(@class,'stage') and .//p[contains(normalize-space(),'" + stageName + "')]]//em[contains(@class,'stageOptions')]";
-    WebElement menuIcon = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(menuXpath)));
-    menuIcon.click();
-
-    // 2. Click the desired option from popup
-    String optionXpath = "//p[contains(@class,'stageOptions-overlay') and normalize-space()='" + option + "']";
-    WebElement optionElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(optionXpath)));
-    optionElement.click();
-Thread.sleep(300);
-}
-
-public void renameStage( String newName) throws InterruptedException {
-
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-    // 1. Wait for the input field with placeholder 'Rename'
-    WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//input[@placeholder='Rename']")));
-    input.clear();
-    input.sendKeys(newName);
-Thread.sleep(500);
-    // 2. Click the ✓ tick icon (first <em>)
-    WebElement tickIcon = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//em[contains(@class, 'pi-check') and contains(@class, 'rename-action_icon')]")));
-    tickIcon.click();
-    Thread.sleep(2000);
-
-}
+    }
 
 
 }
