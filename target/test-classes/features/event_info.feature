@@ -180,3 +180,21 @@ Scenario: Perform a stage action - waitlist candidate
   And I search and select candidate with email "naveen@examly.in"
   When I perform stage action "Offer Rejected" with the following parameters:
     | remarks | Candidate moved to Future Candidate due to role freeze |
+
+
+
+
+@ruleCreation
+Scenario: Create a rule with matching condition and multiple actions
+  Given I am inside the event page for "GG Campus Drive 280804"
+  And I navigate to "Stages" tab in the event
+  And I click on "Screening" stage
+  When I create a rule with the following parameters:
+    | when          | Candidate Form Submit         |
+    | conditionType | matching                      |
+    | field         | Email ID                      |
+    | operator      | ==                            |
+    | value         | naveen@examly.in              |
+    | mode          | positive                      |
+    | actions       | Send Mail, Move Stage         |
+    | template      | Default Mail Template         |

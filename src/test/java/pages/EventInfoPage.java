@@ -270,6 +270,266 @@ public class EventInfoPage {
     private WebElement submitStatusBtn;
 
 
+    @FindBy(xpath = "//button[normalize-space()='Rules']")
+    private WebElement rulesTabBtn;
+
+@FindBy(xpath = "//p-dropdown[contains(@class,'ruleSet-trigger')]//div[contains(@class,'p-dropdown-trigger')]")
+private WebElement ruleWhenDropdown;
+
+@FindBy(xpath = "(//label[@for='20']/preceding-sibling::p-radiobutton//div[@data-pc-name='radiobutton'])[1]")
+private WebElement matchingConditionRadio;
+
+@FindBy(xpath = "(//label[@for='20']/preceding-sibling::p-radiobutton//div[@data-pc-name='radiobutton'])[2]")
+private WebElement forAllRadio;
+
+@FindBy(xpath = "//div[contains(@class,'conditionSet-individual')]//p-dropdown[1]//div[contains(@class,'p-dropdown-trigger')]")
+private WebElement fieldDropdownTrigger;
+
+@FindBy(xpath = "(//div[contains(@class,'conditionSet-individual')]//span[@role='combobox'])[2]/following-sibling::div[@role='button']")
+private WebElement operatorDropdownTrigger;
+
+@FindBy(xpath = "//div[contains(@class,'conditionSet-individual')]//input[contains(@placeholder,'Enter value')]")
+private WebElement conditionInputField;
+
+@FindBy(xpath = "//button[normalize-space(text())='Positive']")
+private WebElement positiveConditionButton;
+
+@FindBy(xpath = "//button[normalize-space(text())='Negative']")
+private WebElement negativeConditionButton;
+
+@FindBy(xpath = "//div[contains(@class, 'conditionSet-individual')]//em[contains(@class, 'addIcon-plus')]")
+private WebElement addConditionIcon;
+
+@FindBy(xpath = "//div[contains(@class, 'conditionSet-individual')]//em[contains(@class, 'removeIcon-minus')]")
+private WebElement removeConditionIcon;
+
+@FindBy(xpath = "(//div[not(contains(@class,'conditionSet-individual'))]//em[contains(@class, 'addIcon-plus')])[2]")
+private WebElement addActionIcon;
+
+@FindBy(xpath = "(//div[not(contains(@class,'conditionSet-individual'))]//em[contains(@class, 'removeIcon-minus')])[2]")
+private WebElement removeActionIcon;
+
+@FindBy(xpath = "//p-dropdown[contains(@class,'ruleSet-dropdown')]//div[contains(@class,'p-dropdown-trigger')]")
+private List<WebElement> actionDropdownTriggers;
+
+
+@FindBy(xpath = "(//p-dropdown[contains(@class,'ruleSet-dropdown')]//div[contains(@class,'p-dropdown-trigger')])[2]")
+private WebElement ruleTemplateDropdown;
+
+@FindBy(xpath = "//button[normalize-space()='Save']")
+private WebElement saveRuleButton;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public void selectActions(List<String> actions) throws InterruptedException {
+    for (int i = 0; i < actions.size(); i++) {
+        if (i >= actionDropdownTriggers.size()) {
+            addActionIcon.click(); // Click '+' to add more if needed
+        }
+        WebElement actionDropdown = actionDropdownTriggers.get(i);
+        ElementUtils.clickAndSelectDropdownValue(driver, actionDropdown, actions.get(i));
+    }
+}
+
+
+
+
+public void selectWhenTrigger(String triggerOption) throws InterruptedException {
+    ElementUtils.clickAndSelectDropdownValue(driver, ruleWhenDropdown, triggerOption);
+}
+
+public void selectConditionType(boolean isMatchingCondition) {
+    if (isMatchingCondition) {
+        matchingConditionRadio.click();
+    } else {
+        forAllRadio.click();
+    }
+}
+
+
+public void enterMatchingCondition(String field, String operator, String value) throws InterruptedException {
+    ElementUtils.clickAndSelectDropdownValue(driver, fieldDropdownTrigger, field);
+    ElementUtils.clickAndSelectDropdownValue(driver, operatorDropdownTrigger, operator);
+    conditionInputField.clear();
+    conditionInputField.sendKeys(value);
+}
+
+
+public void setConditionMode(String mode) {
+    if (mode.equalsIgnoreCase("positive")) {
+        positiveConditionButton.click();
+    } else {
+        negativeConditionButton.click();
+    }
+}
+
+
+public void clickAddCondition() {
+    addConditionIcon.click();
+}
+
+public void clickRemoveCondition() {
+    removeConditionIcon.click();
+}
+
+
+
+
+
+public void selectRuleTemplate(String templateName) throws InterruptedException {
+    ElementUtils.clickAndSelectDropdownValue(driver, ruleTemplateDropdown, templateName);
+}
+
+
+public void clickSaveRule() {
+    saveRuleButton.click();
+}
+
+
+
+
+
+
+
+
+
+public void createRule(
+    String whenOption,
+    boolean isMatching,
+    String conditionField,
+    String conditionOperator,
+    String conditionValue,
+    String conditionMode, // "positive" or "negative"
+    List<String> actions,
+    String template // Optional, pass null if not needed
+) throws InterruptedException {
+
+    selectWhenTrigger(whenOption);
+    selectConditionType(isMatching);
+
+    if (isMatching) {
+        enterMatchingCondition(conditionField, conditionOperator, conditionValue);
+    }
+
+    setConditionMode(conditionMode);
+    selectActions(actions);
+
+    if (template != null && !template.isEmpty()) {
+        selectRuleTemplate(template);
+    }
+
+    clickSaveRule();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    
     public void clickStageByName(String stageName) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));

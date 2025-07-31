@@ -1,0 +1,29 @@
+name: Run Automation Daily
+
+on:
+  schedule:
+    - cron: '30 3 * * *'   # 9:00 AM IST daily
+  workflow_dispatch:       # allows manual run from GitHub UI
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: ⬇️ Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: ☕ Set up Java 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: 📦 Build and Run Tests
+      run: mvn clean test
+
+    - name: 📤 Upload Test Reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-report
+        path: target/surefire-reports/

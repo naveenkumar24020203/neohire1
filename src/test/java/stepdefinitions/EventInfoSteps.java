@@ -6,8 +6,12 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import io.cucumber.datatable.DataTable;
 
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -117,16 +121,6 @@ public class EventInfoSteps {
         eventInfoPage.renameStage(name);
     }
 
-
-
-
-
-
-
-
-
-
-
 @When("I perform stage action {string} with the following parameters:")
 public void i_perform_stage_action_with_parameters(String action, io.cucumber.datatable.DataTable dataTable) throws InterruptedException {
     Map<String, String> params = dataTable.asMap(String.class, String.class);
@@ -141,6 +135,33 @@ public void i_perform_stage_action_without_parameters(String action) throws Inte
 
 }
 
+
+
+
+
+
+
+
+
+
+@When("^I create a rule with the following parameters:$")
+public void i_create_rule_with_parameters(DataTable dataTable) throws InterruptedException {
+    Map<String, String> params = dataTable.asMap(String.class, String.class);
+
+    String when = params.get("when");
+    boolean isMatching = params.get("conditionType").equalsIgnoreCase("matching");
+    String conditionField = params.getOrDefault("field", "");
+    String conditionOperator = params.getOrDefault("operator", "");
+    String conditionValue = params.getOrDefault("value", "");
+    String conditionMode = params.getOrDefault("mode", "positive");
+    String actionsRaw = params.get("actions"); // comma-separated
+    List<String> actions = Arrays.stream(actionsRaw.split(","))
+                                 .map(String::trim)
+                                 .collect(Collectors.toList());
+    String template = params.getOrDefault("template", "");
+
+    eventInfoPage.createRule(when, isMatching, conditionField, conditionOperator, conditionValue, conditionMode, actions, template);
+}
 
 
 
