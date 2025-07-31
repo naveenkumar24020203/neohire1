@@ -25,3 +25,5 @@ jobs:
           -Dcucumber.features=src/test/resources/features/event_info.feature \
           -Dcucumber.filter.tags="@tabnav" \
           -Dcucumber.glue=stepdefinitions
+
+          
