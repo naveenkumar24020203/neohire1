@@ -15,38 +15,45 @@ public class ElementUtils {
 
     // Select from dropdown by visible text
     // In ElementUtils.java
-    public static void clickAndSelectDropdownValue(WebDriver driver, WebElement dropdown, String valueToSelect) throws InterruptedException {
+   public static void clickAndSelectDropdownValue(WebDriver driver, WebElement dropdown, String valueToSelect) throws InterruptedException {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     // Step 1: Click the dropdown
     wait.until(ExpectedConditions.elementToBeClickable(dropdown)).click();
-    Thread.sleep(300);
 
-    // Step 2: Input search (if required) — assuming dropdown opens a searchable list
+// ✅ New wait here — wait for any dropdown option to be visible
+wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//li[@role='option']")));
+Thread.sleep(600); // Optional fine-tune delay
 
-    // Step 3: Build option locator dynamically
-    By optionLocator = By.xpath("//li[@role='option' and normalize-space()='" + valueToSelect + "']");
+    // Step 2: Build option locator dynamically
+    By optionLocator = By.xpath("//li[@role='option' and normalize-space()='" + valueToSelect.trim() + "']");
 
-    //li[@role='option' and normalize-space()='Female']
 
-    // Step 4: Try to click, fallback to JS click if intercepted
-    wait.until(driver1 -> {
+    // Step 3: Try to click, fallback to JS click if intercepted
+    boolean selected = wait.until(driver1 -> {
         try {
             WebElement option = driver1.findElement(optionLocator);
             if (option.isDisplayed() && option.isEnabled()) {
                 try {
                     option.click();
-                    return true;
                 } catch (ElementClickInterceptedException e) {
                     ((JavascriptExecutor) driver1).executeScript("arguments[0].scrollIntoView(true);", option);
                     ((JavascriptExecutor) driver1).executeScript("arguments[0].click();", option);
-                    return true;
                 }
+                return true;
             }
-        } catch (StaleElementReferenceException | NoSuchElementException ignored) {
+        } catch (StaleElementReferenceException | NoSuchElementException e) {
+            System.out.println("Dropdown option not found or stale: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Unexpected error while selecting dropdown: " + e.getMessage());
         }
         return false;
     });
+
+    // Step 4: Final validation
+    if (!selected) {
+        throw new TimeoutException("Unable to select value: " + valueToSelect + " from dropdown after 10 seconds.");
+    }
 }
 
     // Select multiple values from multi-select dropdown (like NeoHire tag pickers)
@@ -113,6 +120,8 @@ public class ElementUtils {
     // Step 1: Open dropdown safely
     try {
         wait.until(ExpectedConditions.elementToBeClickable(dropdownClickElement)).click();
+        Thread.sleep(1000); // Let any overlay settle
+
     } catch (ElementClickInterceptedException e) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", dropdownClickElement);
     }
@@ -125,6 +134,7 @@ public class ElementUtils {
 
     // Step 3: Build dynamic locator
     By optionLocator = By.xpath("//li[contains(@class,'p-dropdown-item') and @aria-label='" + valueToSelect.trim() + "']");
+    //li[contains(@class,'p-dropdown-item') and @aria-label='change email OTP mail']
 
     // Step 4: Try clicking the desired option (JS fallback included)
     try {
@@ -323,6 +333,45 @@ public class ElementUtils {
     String checkboxXpath = "(//table//tr[td[contains(normalize-space(),'" + eventName + "')]]//td[1]//div[contains(@class,'p-checkbox')])[2]";
     WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(checkboxXpath)));
     checkbox.click();
+}
+
+
+public static void searchAndSelectFromDropdownAfterClick(
+        WebDriver driver,
+        WebElement dropdownTrigger,
+        String valueToSelect
+) throws InterruptedException {
+
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    dropdownTrigger.click();
+    Thread.sleep(500);
+
+    WebElement searchInput = wait.until(
+        ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@role='searchbox']"))
+    );
+    searchInput.clear();
+    searchInput.sendKeys(valueToSelect.trim());
+    Thread.sleep(400);
+
+    By optionLocator = By.xpath("//li[contains(@class,'p-dropdown-item') and @aria-label='" + valueToSelect.trim() + "']");
+    wait.until(driver1 -> {
+        try {
+            List<WebElement> options = driver1.findElements(optionLocator);
+            for (WebElement option : options) {
+                if (option.isDisplayed() && option.isEnabled()) {
+                    try {
+                        option.click();
+                    } catch (ElementClickInterceptedException e) {
+                        ((JavascriptExecutor) driver1).executeScript("arguments[0].click();", option);
+                    }
+                    return true;
+                }
+            }
+            return false;
+        } catch (StaleElementReferenceException e) {
+            return false;
+        }
+    });
 }
 
 }

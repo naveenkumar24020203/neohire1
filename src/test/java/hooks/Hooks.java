@@ -34,6 +34,8 @@ public class Hooks {
 
         loginPage.enterEmail(ConfigReader.getProperty("username"));
         loginPage.enterPassword(ConfigReader.getProperty("password"));
+        Thread.sleep(1000);
+
         loginPage.clickLoginButton();
 
         // Handle OTP

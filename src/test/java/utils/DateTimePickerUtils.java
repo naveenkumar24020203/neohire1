@@ -155,69 +155,96 @@ public static void selectDateOnly(WebDriver driver, By triggerLocator,
     WebElement calendarTrigger = wait.until(ExpectedConditions.elementToBeClickable(triggerLocator));
     calendarTrigger.click();
     Thread.sleep(500);
+    System.out.println("✅ Calendar opened");
 
     // 2. Click year dropdown
     WebElement yearButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.p-datepicker-year")));
     yearButton.click();
     Thread.sleep(300);
+    System.out.println("✅ Year picker opened");
 
     int targetYear = Integer.parseInt(year);
+System.out.println("🚨 DEBUG: Passed year=" + year + ", month=" + month + ", day=" + day);
+
+    // 3. Navigate decade-wise
     while (true) {
         List<WebElement> yearElements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
             By.cssSelector("span.p-yearpicker-year")));
 
-        boolean found = false;
-        for (WebElement yearEl : yearElements) {
-            String rawText = yearEl.getText().trim();
-            if (rawText.equals(String.valueOf(targetYear))) {
-                yearEl.click();
-                found = true;
-                break;
+        int firstVisibleYear = Integer.parseInt(yearElements.get(0).getText().trim());
+        int lastVisibleYear = Integer.parseInt(yearElements.get(yearElements.size() - 1).getText().trim());
+
+        System.out.println("📆 Target year: " + targetYear + " | Visible range: " + firstVisibleYear + " - " + lastVisibleYear);
+
+        if (targetYear < firstVisibleYear) {
+            System.out.println("⬅ Clicking Previous Decade");
+            System.out.println("📆 Target year: " + targetYear + " | First visible: " + firstVisibleYear);
+
+            wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.p-datepicker-prev"))).click();
+            Thread.sleep(300);
+        } else if (targetYear > lastVisibleYear) {
+            System.out.println("➡ Clicking Next Decade");
+            wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.p-datepicker-next"))).click();
+            Thread.sleep(300);
+        } else {
+            // Select target year within current decade
+            boolean clicked = false;
+            for (WebElement yearEl : yearElements) {
+                String visibleYear = yearEl.getText().trim();
+                if (visibleYear.equals(String.valueOf(targetYear))) {
+                    System.out.println("✅ Selecting year: " + visibleYear);
+                    yearEl.click();
+                    Thread.sleep(300);
+                    clicked = true;
+                    break;
+                }
             }
+            if (clicked) break;
+            else throw new NoSuchElementException("⚠ Year '" + targetYear + "' not found even though it's in visible range");
         }
-
-        if (found) break;
-
-        int firstYear = Integer.parseInt(yearElements.get(0).getText().trim());
-        By navButton = (targetYear < firstYear)
-                ? By.cssSelector("button.p-datepicker-prev")
-                : By.cssSelector("button.p-datepicker-next");
-
-        wait.until(ExpectedConditions.elementToBeClickable(navButton)).click();
-        Thread.sleep(300);
     }
 
-    // 3. Select Month
+    // 4. Select Month
     String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     String shortMonth = month.matches("\\d+") ? monthNames[Integer.parseInt(month) - 1] : month;
+    System.out.println("📆 Selecting month: " + shortMonth);
 
     List<WebElement> months = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
         By.cssSelector("span.p-monthpicker-month")));
     for (WebElement m : months) {
         if (m.getText().trim().equalsIgnoreCase(shortMonth)) {
             m.click();
+                Thread.sleep(300);
+
+            System.out.println("✅ Month selected: " + shortMonth);
             break;
         }
     }
 
-    // 4. Select Day
+    // 5. Select Day
+    System.out.println("📆 Selecting day: " + day);
+        // STEP 4: Select DATE (this will CLOSE the calendar)
     List<WebElement> dayCells = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
         By.cssSelector("table.p-datepicker-calendar td")));
     for (WebElement cell : dayCells) {
-        if (cell.getAttribute("class").contains("p-disabled") || 
-            cell.getAttribute("class").contains("p-datepicker-other-month")) {
-            continue;
-        }
+        String cellClass = cell.getAttribute("class");
+        if (cellClass.contains("p-datepicker-other-month") || cellClass.contains("p-disabled")) continue;
+
         WebElement span = cell.findElement(By.tagName("span"));
         if (span.getText().trim().equals(day)) {
-            span.click();
+            span.click(); // Will close the picker
+            Thread.sleep(300);
             break;
         }
     }
 
-    Thread.sleep(300); // optional settle
+    
+
+    Thread.sleep(300);
+    System.out.println("✅ Date selection completed");
 }
+
 
 
 public static void parseAndSelectDate(SelectDateFunction dateFunction, String dateTime) throws InterruptedException {

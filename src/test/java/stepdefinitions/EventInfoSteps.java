@@ -6,6 +6,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import pages.EventInfoPage;
@@ -96,8 +99,9 @@ public class EventInfoSteps {
     }
 
     @And("I click on {string} stage")
-    public void i_click_on_stage(String string) {
+    public void i_click_on_stage(String string) throws InterruptedException {
         eventInfoPage.clickStageByName(string);
+        Thread.sleep(400);
     }
 
     @And("In {string} stage I click on {string} option")
@@ -112,5 +116,34 @@ public class EventInfoSteps {
     public void i_change_the_name_to(String name) throws InterruptedException {
         eventInfoPage.renameStage(name);
     }
+
+
+
+
+
+
+
+
+
+
+
+@When("I perform stage action {string} with the following parameters:")
+public void i_perform_stage_action_with_parameters(String action, io.cucumber.datatable.DataTable dataTable) throws InterruptedException {
+    Map<String, String> params = dataTable.asMap(String.class, String.class);
+    eventInfoPage.performStageAction(action, params);
+    Thread.sleep(4000);
+}
+
+@When("I perform stage action {string} without parameters")
+public void i_perform_stage_action_without_parameters(String action) throws InterruptedException {
+    eventInfoPage.performStageAction(action, new HashMap<>());  // Empty params map
+        Thread.sleep(4000);
+
+}
+
+
+
+
+
 
 }

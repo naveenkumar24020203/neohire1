@@ -35,7 +35,7 @@
 <a href="#"><span class="badge badge-primary"></span></a>
 </li>
 <li class="m-r-10">
-<a href="#"><span class="badge badge-primary">Jul 30, 2025 11:46:11 am</span></a>
+<a href="#"><span class="badge badge-primary">Jul 31, 2025 01:08:30 pm</span></a>
 </li>
 </ul>
 </div>
@@ -79,7 +79,7 @@
 <li class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-tag"></i></a>
 <ul id="tag-toggle" class="dropdown-menu dropdown-md p-v-0">
-<a class="dropdown-item" href="#">@candidate</a>
+<a class="dropdown-item" href="#">@stageAction8</a>
 </ul>
 </li>
 </ul>
@@ -90,9 +90,9 @@
           tag=""
           device="">
           <div class="test-detail">
-            <p class="name">Candidate Management in Event</p>
+            <p class="name">Event Info - Navigation and Stage Management</p>
             <p class="text-sm">
-              <span>11:46:11 am</span> / <span>00:00:44:552</span>
+              <span>1:08:30 pm</span> / <span>00:00:20:019</span>
               <span class="badge pass-bg log float-right">Pass</span>
             </p>
           </div>
@@ -100,10 +100,10 @@
 <div class="detail-head">
 <div class="p-v-10">
 <div class="info">
-<h5 class="test-status text-pass">Candidate Management in Event</h5>
-<span class='badge badge-success'>07.30.2025 11:46:11 am</span>
-<span class='badge badge-danger'>07.30.2025 11:46:56 am</span>
-<span class='badge badge-default'>00:00:44:552</span>
+<h5 class="test-status text-pass">Event Info - Navigation and Stage Management</h5>
+<span class='badge badge-success'>07.31.2025 1:08:30 pm</span>
+<span class='badge badge-danger'>07.31.2025 1:08:50 pm</span>
+<span class='badge badge-default'>00:00:20:019</span>
 &middot; <span class='uri-anchor badge badge-default'>#test-id=1</span>
 <span title='Skip to the next failed step' class='badge badge-danger pointer float-right ne ml-1'><i class="fa fa-fast-forward"></i></span>
 <span title='Collapse all nodes' class='badge badge-default pointer float-right ct ml-1'><i class="fa fa-compress"></i></span>
@@ -116,78 +116,35 @@
   <div class="card">
     <div class="card-header" role="tab">
       <div class="card-title">
-        <div class="node" id="2"><span class="badge log pass-bg mr-2">Pass</span>Add a candidate</div>
+        <div class="node" id="2"><span class="badge log pass-bg mr-2">Pass</span>Perform a stage action - waitlist candidate</div>
       </div>
     </div>
         <div class="collapse">
           <div class="card-body">
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_am_on_the_canditate_page()">
-                <span>Given I am on the Canditate page</span>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.iSearchAndClickOnEvent(java.lang.String)">
+                <span>Given I am inside the event page for "GG Campus Drive 280804"</span>
       <div>
       </div>
               </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_click_on_button()">
-                <span>And I click on Invite Candidate button</span>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.iNavigateToTabInTheEvent(java.lang.String)">
+                <span>And I navigate to "Stages" tab in the event</span>
       <div>
       </div>
               </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_as_option(java.lang.String)">
-                <span>And I select "Single-Invite" as option</span>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_click_on_stage(java.lang.String)">
+                <span>And I click on "Offer" stage</span>
       <div>
       </div>
               </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_first_name_as(java.lang.String)">
-                <span>And I enter First name as "Naveen Kumar"</span>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.iSearchAndSelectCandidateWithEmail(java.lang.String)">
+                <span>And I search and select candidate with email "naveen@examly.in"</span>
       <div>
       </div>
               </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_last_name_as(java.lang.String)">
-                <span>And I enter Last name as "S"</span>
-      <div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_perform_stage_action_with_parameters(java.lang.String,io.cucumber.datatable.DataTable)">
+                <span>When I perform stage action "Offer Rejected" with the following parameters:</span>
+      <div><table class='markup-table table '><tr><td>remarks</td><td>Candidate moved to Future Candidate due to role freeze</td></tr></table>
       </div>
-              </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_email_id_as(java.lang.String)">
-                <span>And I enter Email Id as "naveen+02@examly.in"</span>
-      <div>
-      </div>
-              </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_gender_as(java.lang.String)">
-                <span>And I select Gender as "Male"</span>
-      <div>
-      </div>
-              </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_date_of_birth_as(java.lang.String)">
-                <span>And I enter Date of birth as "24-02-2003"</span>
-      <div>
-      </div>
-              </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_mobile_number_as(java.lang.String)">
-                <span>And I enter mobile number as "8855885548"</span>
-      <div>
-      </div>
-              </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_event_category_as(java.lang.String)">
-                <span>And I select Event category as "Technical"</span>
-      <div>
-      </div>
-              </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_event_name_as(java.lang.String)">
-                <span>And I select Event name as "GG Campus Drive 2808"</span>
-      <div>
-      </div>
-              </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_source_type_as(java.lang.String)">
-                <span>And I select Source type as "Data"</span>
-      <div>
-      </div>
-              </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_source_name_as(java.lang.String)">
-                <span>And I select Source name as "Linkedin"</span>
-      <div>
-      </div>
-              </div>
-              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_click_send_invite_button()">
-                <span>Then I click Send Invite button</span>
       <div>
       </div>
               </div>
@@ -219,12 +176,12 @@
 <span class="meta">
 <span class='badge log pass-bg'>1</span>
 </span>
-<p class="name">@candidate</p>
+<p class="name">@stageAction8</p>
 <p class="duration text-sm">1 tests</p>
 </div>
 <div class="test-contents d-none">
 <div class="info">
-<h4>@candidate</h4>
+<h4>@stageAction8</h4>
 <span status="pass" class='badge log pass-bg'>1 passed</span>
 </div>
 <table class='table table-sm mt-4'>
@@ -238,11 +195,11 @@
 <tbody>
 <tr class="tag-test-status" status="pass">
 <td><span class="badge log pass-bg">Pass</span></td>
-<td>11:46:11 am</td>
+<td>13:08:30 pm</td>
 <td>
-<a href="#" class="linked" test-id='1' id='2'>Add a candidate</a>
+<a href="#" class="linked" test-id='1' id='2'>Perform a stage action - waitlist candidate</a>
 <div class="">
-<span class="badge badge-default">Candidate Management in Event.Add a candidate</span>
+<span class="badge badge-default">Event Info - Navigation and Stage Management.Perform a stage action - waitlist candidate</span>
 </div>
 </td>
 </tr>
@@ -263,13 +220,13 @@
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0">Started</p>
-<h3>Jul 30, 2025 11:46:11 am</h3>
+<h3>Jul 31, 2025 01:08:30 pm</h3>
 </div></div>
 </div>
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0">Ended</p>
-<h3>Jul 30, 2025 11:46:56 am</h3>
+<h3>Jul 31, 2025 01:08:50 pm</h3>
 </div></div>
 </div>
 <div class="col-md-3">
@@ -340,7 +297,7 @@
 </div>
 </div>
 <div class="card-footer">
-<div><small data-tooltip='100%'><b>14</b> steps passed</small></div>
+<div><small data-tooltip='100%'><b>5</b> steps passed</small></div>
 <div>
 <small data-tooltip='0%'><b>0</b> steps failed,
 <b>0</b> skipped, <b data-tooltip='%'>0</b> others
@@ -359,7 +316,7 @@
 </div></div>
 <script>
 var timeline = {
-"Candidate Management in Event":44.552
+"Event Info - Navigation and Stage Management":20.019
 };
 </script>
 <div class="row">
@@ -369,7 +326,7 @@ var timeline = {
 <div class="card-body pb-0 pt-0"><table class="table table-sm table-bordered">
 <thead><tr class="bg-gray"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th><th>Others</th><th>Passed %</th></tr></thead><tbody>
 <tr>
-<td>@candidate</td>
+<td>@stageAction8</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
@@ -396,7 +353,7 @@ warningChild: 0,
 skipChild: 0,
 infoChild: 0,
 grandChildCount: 5,
-passGrandChild: 14,
+passGrandChild: 5,
 failGrandChild: 0,
 warningGrandChild: 0,
 skipGrandChild: 0,
