@@ -94,7 +94,6 @@ Scenario: Perform a stage action - send mail
   And I search and select candidate with email "naveen@examly.in"
   When I perform stage action "send mail" with the following parameters:
     | template | User Welcome Mail |
-  # Then I should see success message for action "send mail"
 
 
 @stageAction2
@@ -121,8 +120,7 @@ Scenario: Perform a stage action - send documentation link
     | docPoc      | Muniyappan Mani             |
     | deadline    | 2 Hours           |
     | template    | Documentation Submit Request Mail -dev   |
-    # | subject     | Submit Your Docs     |
-    # | content     | Please upload docs.  |
+
 
 
 @stageAction4
@@ -197,8 +195,6 @@ Scenario: Create a rule with for all condition
     | positiveTemplate     | Interview -2                |
 
 
-
-
 @ruleCreation
 Scenario: Create a rule with matching condition and single actions
   Given I am inside the event page for "GG Campus Drive 280804"
@@ -217,11 +213,7 @@ Scenario: Create a rule with matching condition and single actions
     | negativeTemplate | Job Rejection Mail-dev                   |
 
 
-
-
-
 @ruleCreation
-
   Scenario: Create a rule with matching condition and multiple actions and single template
     Given I am inside the event page for "GG Campus Drive 280804"
     And I navigate to "Stages" tab in the event
@@ -241,7 +233,6 @@ Scenario: Create a rule with matching condition and single actions
 
 
 @ruleCreation
-
   Scenario: Create a rule with matching condition and multiple actions and multiple template
     Given I am inside the event page for "GG Campus Drive 280804"
     And I navigate to "Stages" tab in the event
