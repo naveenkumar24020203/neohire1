@@ -159,41 +159,55 @@ public void i_create_rule_with_parameters(DataTable dataTable) throws Interrupte
     String conditionOperator = params.getOrDefault("operator", "");
     String conditionValue = params.getOrDefault("value", "");
 
-    // Handle both 'actions' and 'positiveActions' gracefully
+    // 🔹 Handle actions
     List<String> positiveActions = Arrays.stream(
-        params.getOrDefault("positiveActions", params.getOrDefault("actions", ""))
-              .split(","))
-        .map(String::trim)
-        .filter(s -> !s.isEmpty())
-        .collect(Collectors.toList());
+            params.getOrDefault("positiveActions", params.getOrDefault("actions", ""))
+                    .split(","))
+            .map(String::trim)
+            .filter(s -> !s.isEmpty())
+            .collect(Collectors.toList());
 
     List<String> negativeActions = isMatching
-        ? Arrays.stream(params.getOrDefault("negativeActions", "")
-              .split(","))
-              .map(String::trim)
-              .filter(s -> !s.isEmpty())
-              .collect(Collectors.toList())
-        : new ArrayList<>();
+            ? Arrays.stream(params.getOrDefault("negativeActions", "")
+                    .split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .collect(Collectors.toList())
+            : new ArrayList<>();
 
-    String positiveTemplate = params.getOrDefault("positiveTemplate", params.getOrDefault("template", params.getOrDefault("templates", "")));
-    String negativeTemplate = isMatching
-        ? params.getOrDefault("negativeTemplate", "")
-        : "";
+    // 🔹 Handle templates (multiple comma-separated)
+    List<String> positiveTemplates = Arrays.stream(
+            params.getOrDefault("positiveTemplate", params.getOrDefault("template", ""))
+                    .split(","))
+            .map(String::trim)
+            .filter(s -> !s.isEmpty())
+            .collect(Collectors.toList());
 
+    List<String> negativeTemplates = isMatching
+            ? Arrays.stream(params.getOrDefault("negativeTemplate", "")
+                    .split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .collect(Collectors.toList())
+            : new ArrayList<>();
+
+    // 🔹 Pass to page method
     eventInfoPage.createRule(
-        when,
-        isMatching,
-        conditionField,
-        conditionOperator,
-        conditionValue,
-        positiveActions,
-        negativeActions,
-        positiveTemplate,
-        negativeTemplate
+            when,
+            isMatching,
+            conditionField,
+            conditionOperator,
+            conditionValue,
+            positiveActions,
+            negativeActions,
+            positiveTemplates,
+            negativeTemplates
     );
 
-    Thread.sleep(2000);
+    Thread.sleep(1000); // optional
 }
+
+
 
 
 

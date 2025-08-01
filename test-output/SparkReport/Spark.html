@@ -35,7 +35,7 @@
 <a href="#"><span class="badge badge-primary"></span></a>
 </li>
 <li class="m-r-10">
-<a href="#"><span class="badge badge-primary">Aug 1, 2025 11:58:04 am</span></a>
+<a href="#"><span class="badge badge-primary">Aug 1, 2025 04:05:23 pm</span></a>
 </li>
 </ul>
 </div>
@@ -79,7 +79,7 @@
 <li class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-tag"></i></a>
 <ul id="tag-toggle" class="dropdown-menu dropdown-md p-v-0">
-<a class="dropdown-item" href="#">@ruleCreation2</a>
+<a class="dropdown-item" href="#">@ruleCreation</a>
 </ul>
 </li>
 </ul>
@@ -92,7 +92,7 @@
           <div class="test-detail">
             <p class="name">Event Info - Navigation and Stage Management</p>
             <p class="text-sm">
-              <span>11:58:04 am</span> / <span>00:00:28:016</span>
+              <span>4:05:23 pm</span> / <span>00:02:18:938</span>
               <span class="badge pass-bg log float-right">Pass</span>
             </p>
           </div>
@@ -101,9 +101,9 @@
 <div class="p-v-10">
 <div class="info">
 <h5 class="test-status text-pass">Event Info - Navigation and Stage Management</h5>
-<span class='badge badge-success'>08.01.2025 11:58:04 am</span>
-<span class='badge badge-danger'>08.01.2025 11:58:32 am</span>
-<span class='badge badge-default'>00:00:28:016</span>
+<span class='badge badge-success'>08.01.2025 4:05:23 pm</span>
+<span class='badge badge-danger'>08.01.2025 4:07:42 pm</span>
+<span class='badge badge-default'>00:02:18:938</span>
 &middot; <span class='uri-anchor badge badge-default'>#test-id=1</span>
 <span title='Skip to the next failed step' class='badge badge-danger pointer float-right ne ml-1'><i class="fa fa-fast-forward"></i></span>
 <span title='Collapse all nodes' class='badge badge-default pointer float-right ct ml-1'><i class="fa fa-compress"></i></span>
@@ -116,7 +116,45 @@
   <div class="card">
     <div class="card-header" role="tab">
       <div class="card-title">
-        <div class="node" id="2"><span class="badge log pass-bg mr-2">Pass</span>Create a rule with matching condition and single actions</div>
+        <div class="node" id="2"><span class="badge log pass-bg mr-2">Pass</span>Create a rule with for all condition</div>
+      </div>
+    </div>
+        <div class="collapse">
+          <div class="card-body">
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.iSearchAndClickOnEvent(java.lang.String)">
+                <span>Given I am inside the event page for "GG Campus Drive 280804"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.iNavigateToTabInTheEvent(java.lang.String)">
+                <span>And I navigate to "Stages" tab in the event</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_click_on_stage(java.lang.String)">
+                <span>And I click on "Eligibility Check" stage</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_click_on_tab_button(java.lang.String)">
+                <span>And I click on "Rules" tab button</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_create_rule_with_parameters(io.cucumber.datatable.DataTable)">
+                <span>When I create a rule with the following parameters:</span>
+      <div><table class='markup-table table '><tr><td>when</td><td>Candidate Form Submit</td></tr><tr><td>conditionType</td><td>all</td></tr><tr><td>positiveActions</td><td>Send Email</td></tr><tr><td>positiveTemplate</td><td>Interview -2</td></tr></table>
+      </div>
+      <div>
+      </div>
+              </div>
+          </div>
+        </div>
+  </div>
+  <div class="card">
+    <div class="card-header" role="tab">
+      <div class="card-title">
+        <div class="node" id="10"><span class="badge log pass-bg mr-2">Pass</span>Create a rule with matching condition and single actions</div>
       </div>
     </div>
         <div class="collapse">
@@ -151,6 +189,82 @@
           </div>
         </div>
   </div>
+  <div class="card">
+    <div class="card-header" role="tab">
+      <div class="card-title">
+        <div class="node" id="18"><span class="badge log pass-bg mr-2">Pass</span>Create a rule with matching condition and multiple actions and single template</div>
+      </div>
+    </div>
+        <div class="collapse">
+          <div class="card-body">
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.iSearchAndClickOnEvent(java.lang.String)">
+                <span>Given I am inside the event page for "GG Campus Drive 280804"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.iNavigateToTabInTheEvent(java.lang.String)">
+                <span>And I navigate to "Stages" tab in the event</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_click_on_stage(java.lang.String)">
+                <span>And I click on "Eligibility Check" stage</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_click_on_tab_button(java.lang.String)">
+                <span>And I click on "Rules" tab button</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_create_rule_with_parameters(io.cucumber.datatable.DataTable)">
+                <span>When I create a rule with the following parameters:</span>
+      <div><table class='markup-table table '><tr><td>when</td><td>Candidate Form Submit</td></tr><tr><td>conditionType</td><td>matching</td></tr><tr><td>field</td><td>Email ID</td></tr><tr><td>operator</td><td>==</td></tr><tr><td>value</td><td>naveen@examly.in</td></tr><tr><td>positiveActions</td><td>Send Email, Shortlist Candidate</td></tr><tr><td>positiveTemplate</td><td>Documentation Submit Request Mail -dev</td></tr><tr><td>negativeActions</td><td>Send Email, Reject Candidate</td></tr><tr><td>negativeTemplate</td><td>Job Rejection Mail-dev</td></tr></table>
+      </div>
+      <div>
+      </div>
+              </div>
+          </div>
+        </div>
+  </div>
+  <div class="card">
+    <div class="card-header" role="tab">
+      <div class="card-title">
+        <div class="node" id="26"><span class="badge log pass-bg mr-2">Pass</span>Create a rule with matching condition and multiple actions and multiple template</div>
+      </div>
+    </div>
+        <div class="collapse">
+          <div class="card-body">
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.iSearchAndClickOnEvent(java.lang.String)">
+                <span>Given I am inside the event page for "GG Campus Drive 280804"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.iNavigateToTabInTheEvent(java.lang.String)">
+                <span>And I navigate to "Stages" tab in the event</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_click_on_stage(java.lang.String)">
+                <span>And I click on "Eligibility Check" stage</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_click_on_tab_button(java.lang.String)">
+                <span>And I click on "Rules" tab button</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.EventInfoSteps.i_create_rule_with_parameters(io.cucumber.datatable.DataTable)">
+                <span>When I create a rule with the following parameters:</span>
+      <div><table class='markup-table table '><tr><td>when</td><td>Candidate Form Submit</td></tr><tr><td>conditionType</td><td>matching</td></tr><tr><td>field</td><td>Email ID</td></tr><tr><td>operator</td><td>==</td></tr><tr><td>value</td><td>naveen@examly.in</td></tr><tr><td>positiveActions</td><td>Send Email, Send Email</td></tr><tr><td>positiveTemplate</td><td>Documentation Submit Request Mail -dev, Documentation Submit Request Mail -dev</td></tr><tr><td>negativeActions</td><td>Send Email, Send Email</td></tr><tr><td>negativeTemplate</td><td>Job Rejection Mail-dev, Job Rejection Mail-dev</td></tr></table>
+      </div>
+      <div>
+      </div>
+              </div>
+          </div>
+        </div>
+  </div>
 </div>
           </div>
         </li>
@@ -174,15 +288,15 @@
 <li class="test-item">
 <div class="test-detail">
 <span class="meta">
-<span class='badge log pass-bg'>1</span>
+<span class='badge log pass-bg'>4</span>
 </span>
-<p class="name">@ruleCreation2</p>
-<p class="duration text-sm">1 tests</p>
+<p class="name">@ruleCreation</p>
+<p class="duration text-sm">4 tests</p>
 </div>
 <div class="test-contents d-none">
 <div class="info">
-<h4>@ruleCreation2</h4>
-<span status="pass" class='badge log pass-bg'>1 passed</span>
+<h4>@ruleCreation</h4>
+<span status="pass" class='badge log pass-bg'>4 passed</span>
 </div>
 <table class='table table-sm mt-4'>
 <thead>
@@ -195,11 +309,41 @@
 <tbody>
 <tr class="tag-test-status" status="pass">
 <td><span class="badge log pass-bg">Pass</span></td>
-<td>11:58:04 am</td>
+<td>16:05:23 pm</td>
 <td>
-<a href="#" class="linked" test-id='1' id='2'>Create a rule with matching condition and single actions</a>
+<a href="#" class="linked" test-id='1' id='2'>Create a rule with for all condition</a>
+<div class="">
+<span class="badge badge-default">Event Info - Navigation and Stage Management.Create a rule with for all condition</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="pass">
+<td><span class="badge log pass-bg">Pass</span></td>
+<td>16:05:53 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='10'>Create a rule with matching condition and single actions</a>
 <div class="">
 <span class="badge badge-default">Event Info - Navigation and Stage Management.Create a rule with matching condition and single actions</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="pass">
+<td><span class="badge log pass-bg">Pass</span></td>
+<td>16:06:24 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='18'>Create a rule with matching condition and multiple actions and single template</a>
+<div class="">
+<span class="badge badge-default">Event Info - Navigation and Stage Management.Create a rule with matching condition and multiple actions and single template</span>
+</div>
+</td>
+</tr>
+<tr class="tag-test-status" status="pass">
+<td><span class="badge log pass-bg">Pass</span></td>
+<td>16:07:00 pm</td>
+<td>
+<a href="#" class="linked" test-id='1' id='26'>Create a rule with matching condition and multiple actions and multiple template</a>
+<div class="">
+<span class="badge badge-default">Event Info - Navigation and Stage Management.Create a rule with matching condition and multiple actions and multiple template</span>
 </div>
 </td>
 </tr>
@@ -220,13 +364,13 @@
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0">Started</p>
-<h3>Aug 1, 2025 11:58:04 am</h3>
+<h3>Aug 1, 2025 04:05:23 pm</h3>
 </div></div>
 </div>
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0">Ended</p>
-<h3>Aug 1, 2025 11:58:32 am</h3>
+<h3>Aug 1, 2025 04:07:42 pm</h3>
 </div></div>
 </div>
 <div class="col-md-3">
@@ -277,7 +421,7 @@
 </div>
 </div>
 <div class="card-footer">
-<div><small data-tooltip='100%'><b>1</b> scenarios passed</small></div>
+<div><small data-tooltip='100%'><b>4</b> scenarios passed</small></div>
 <div>
 <small data-tooltip='0%'><b>0</b> scenarios failed,
 <b>0</b> skipped, <b data-tooltip='%'>0</b> others
@@ -297,7 +441,7 @@
 </div>
 </div>
 <div class="card-footer">
-<div><small data-tooltip='100%'><b>5</b> steps passed</small></div>
+<div><small data-tooltip='100%'><b>20</b> steps passed</small></div>
 <div>
 <small data-tooltip='0%'><b>0</b> steps failed,
 <b>0</b> skipped, <b data-tooltip='%'>0</b> others
@@ -316,7 +460,7 @@
 </div></div>
 <script>
 var timeline = {
-"Event Info - Navigation and Stage Management":28.016
+"Event Info - Navigation and Stage Management":138.938
 };
 </script>
 <div class="row">
@@ -326,8 +470,8 @@ var timeline = {
 <div class="card-body pb-0 pt-0"><table class="table table-sm table-bordered">
 <thead><tr class="bg-gray"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th><th>Others</th><th>Passed %</th></tr></thead><tbody>
 <tr>
-<td>@ruleCreation2</td>
-<td>1</td>
+<td>@ruleCreation</td>
+<td>4</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -347,13 +491,13 @@ failParent: 0,
 warningParent: 0,
 skipParent: 0,
 childCount: 5,
-passChild: 1,
+passChild: 4,
 failChild: 0,
 warningChild: 0,
 skipChild: 0,
 infoChild: 0,
 grandChildCount: 5,
-passGrandChild: 5,
+passGrandChild: 20,
 failGrandChild: 0,
 warningGrandChild: 0,
 skipGrandChild: 0,

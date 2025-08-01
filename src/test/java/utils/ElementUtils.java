@@ -374,5 +374,35 @@ public static void searchAndSelectFromDropdownAfterClick(
     });
 }
 
+
+
+
+
+
+
+
+
+
+
+public static boolean clickAndSelectDropdownValueWithRetry(WebDriver driver, WebElement dropdown, String valueToSelect) {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    try {
+        dropdown.click();
+        Thread.sleep(400); // allow dropdown to expand
+
+        By optionLocator = By.xpath("//li[contains(@class,'p-dropdown-item') and normalize-space()='" + valueToSelect + "']");
+        WebElement option = wait.until(ExpectedConditions.visibilityOfElementLocated(optionLocator));
+
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", option);
+        wait.until(ExpectedConditions.elementToBeClickable(option)).click();
+        return true;
+    } catch (Exception e) {
+        System.out.println("⚠️ Dropdown option '" + valueToSelect + "' not found or not clickable: " + e.getMessage());
+        return false;
+    }
+}
+
+
+
 }
 

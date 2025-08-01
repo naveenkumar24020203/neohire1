@@ -316,24 +316,11 @@ private WebElement removeActionIcon;
 private List<WebElement> actionDropdownTriggers;
 
 
-@FindBy(xpath = "(//p-dropdown[contains(@class,'ruleSet-dropdown')]//div[contains(@class,'p-dropdown-trigger')])[2]")
+@FindBy(xpath = "//div[contains(@class,'stage-actions-dropdown')]//p-dropdown[.//span[normalize-space()=''] or .//span[text()=' ']]/div[contains(@class,'p-dropdown')]/div[@role='button']")
 private WebElement ruleTemplateDropdown;
 
 @FindBy(xpath = "//button[normalize-space()='Save']")
 private WebElement saveRuleButton;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 public void clickRulesTabBtn() {
@@ -345,14 +332,47 @@ public void clickAddRuleBtn() {
     addRuleBtn.click();
 }
 
-    private void clickNegativeConditionButton() {
-        positiveConditionButton.click();
-    }
 
 
-    private void clickPositiveConditionButton() {
+
+        public void clickNegativeConditionButton() {
+    try {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(negativeConditionButton));
+
+        // Scroll and attempt normal click
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", negativeConditionButton);
+        Thread.sleep(300); // Optional wait for animations
         negativeConditionButton.click();
+
+    } catch (ElementClickInterceptedException e) {
+        // Fallback to JS click
+        System.out.println("⚠️ Intercepted: Falling back to JS click for Positive button");
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", negativeConditionButton);
+    } catch (Exception ex) {
+        throw new RuntimeException("❌ Failed to click Positive condition button", ex);
     }
+}
+
+    public void clickPositiveConditionButton() {
+    try {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(positiveConditionButton));
+
+        // Scroll and attempt normal click
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", positiveConditionButton);
+        Thread.sleep(300); // Optional wait for animations
+        positiveConditionButton.click();
+
+    } catch (ElementClickInterceptedException e) {
+        // Fallback to JS click
+        System.out.println("⚠️ Intercepted: Falling back to JS click for Positive button");
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", positiveConditionButton);
+    } catch (Exception ex) {
+        throw new RuntimeException("❌ Failed to click Positive condition button", ex);
+    }
+}
+
 
 
 public void selectActions(List<String> actions) throws InterruptedException {
@@ -364,7 +384,6 @@ public void selectActions(List<String> actions) throws InterruptedException {
         ElementUtils.clickAndSelectDropdownValue(driver, actionDropdown, actions.get(i));
     }
 }
-
 
 
 
@@ -407,21 +426,38 @@ public void clickRemoveCondition() {
 }
 
 
-
-
-
 public void selectRuleTemplate(String templateName) throws InterruptedException {
 ElementUtils.searchAndSelectFromDropdown(ruleTemplateDropdown,searchInDropDown,templateName,driver);}
 
 
 public void clickSaveRule() {
-    saveRuleButton.click();
+    try {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        // Optional: fallback locator if needed (you can skip this if @FindBy is working)
+        By saveButtonLocator = By.xpath("//button[normalize-space()='Save']");
+
+        // Scroll into view using JS
+        WebElement saveBtn = wait.until(ExpectedConditions.presenceOfElementLocated(saveButtonLocator));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", saveBtn);
+        Thread.sleep(400); // optional wait for rendering
+
+        // Now wait for it to be clickable
+        wait.until(ExpectedConditions.elementToBeClickable(saveBtn));
+
+        try {
+            saveBtn.click();
+        } catch (ElementClickInterceptedException e) {
+            System.out.println("⚠️ Intercepted: Falling back to JS click for Save Rule");
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", saveBtn);
+        }
+
+        System.out.println("💾 Save Rule clicked successfully.");
+
+    } catch (Exception e) {
+        throw new RuntimeException("❌ Failed to click Save Rule button", e);
+    }
 }
-
-
-
-
-
 
 
 
@@ -434,8 +470,8 @@ public void createRule(
     String conditionValue,
     List<String> positiveActions,
     List<String> negativeActions,
-    String positiveTemplate,
-    String negativeTemplate
+    List<String> positiveTemplates,
+    List<String> negativeTemplates
 ) throws InterruptedException {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
@@ -448,36 +484,76 @@ public void createRule(
         Thread.sleep(800);
     }
 
+    // Step 1: When and condition
     selectWhenTrigger(whenOption);
     selectConditionType(isMatching);
 
     if (isMatching) {
         enterMatchingCondition(conditionField, conditionOperator, conditionValue);
 
-        // Positive flow
-        clickPositiveConditionButton();
-        selectActions(positiveActions);
-        if (positiveTemplate != null && !positiveTemplate.isEmpty()) {
-            selectRuleTemplate(positiveTemplate);
-        }
-
-        // Negative flow
+        // 🔻 Negative path
         clickNegativeConditionButton();
-        selectActions(negativeActions);
-        if (negativeTemplate != null && !negativeTemplate.isEmpty()) {
-            selectRuleTemplate(negativeTemplate);
-        }
+        selectActionsWithTemplates(negativeActions, negativeTemplates);
 
+        // 🔺 Positive path
+        clickPositiveConditionButton();
+        selectActionsWithTemplates(positiveActions, positiveTemplates);
     } else {
-        // For all: only one action set (positive)
-        selectActions(positiveActions);
-        if (positiveTemplate != null && !positiveTemplate.isEmpty()) {
-            selectRuleTemplate(positiveTemplate);
-        }
+        // Positive path only (no matching condition)
+        selectActionsWithTemplates(positiveActions, positiveTemplates);
     }
 
     Thread.sleep(500);
     clickSaveRule();
+}
+
+
+public void selectActionsWithTemplates(List<String> actions, List<String> templates) throws InterruptedException {
+    System.out.println("🔧 Starting to select actions and templates...");
+    System.out.println("➡️ Total Actions: " + actions.size());
+    System.out.println("➡️ Total Templates: " + templates.size());
+
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+    for (int i = 0; i < actions.size(); i++) {
+        String action = actions.get(i).trim();
+        String template = (i < templates.size()) ? templates.get(i).trim() : "";
+
+        // ➕ Add new action block if not the first
+        if (i > 0) {
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(addActionIcon));
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", addActionIcon);
+                Thread.sleep(300);
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addActionIcon);
+                System.out.println("➕ '+' Add Action button clicked.");
+                Thread.sleep(800); // Let DOM update
+            } catch (Exception e) {
+                throw new RuntimeException("❌ Failed to click '+' Add Action button", e);
+            }
+        }
+
+        // 🔽 Step 1: Select Action from first available empty dropdown
+        WebElement actionDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+            "//div[contains(@class,'stage-actions-dropdown')]//p-dropdown[.//span[normalize-space()=''] or .//span[text()=' ']]/div[contains(@class,'p-dropdown')]/div[@role='button']"
+        )));
+        System.out.println("➡️ Selecting Action: " + action);
+        ElementUtils.clickAndSelectDropdownValue(driver, actionDropdown, action);
+
+        System.out.println("✅ Action selected: " + action);
+
+        // 🧾 Step 2: Select Template if given
+        if (!template.isEmpty()) {
+            Thread.sleep(800); // Let dropdown appear/render
+
+            WebElement templateDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+                "//div[contains(@class,'stage-actions-dropdown')]//p-dropdown[.//span[normalize-space()=''] or .//span[text()=' ']]/div[contains(@class,'p-dropdown')]/div[@role='button']"
+            )));
+            System.out.println("✏️ Selecting Template: " + template);
+                                    ElementUtils.searchAndSelectFromDropdown(templateDropdown,searchInDropDown,template,driver);
+            System.out.println("✅ Template selected: " + template);
+        }
+    }
 }
 
 
@@ -500,83 +576,6 @@ public void createRule(
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
 
 
     public void clickStageByName(String stageName) {
@@ -692,14 +691,11 @@ public void clickStatusButton(String label) {
 }
 
 
-
-
     public void clickSubmitStatus() {
         wait.until(ExpectedConditions.elementToBeClickable(submitStatusBtn)).click();
     }
    
 
-   
     public void clickSendTestLinkButton() {
         wait.until(ExpectedConditions.elementToBeClickable(sendTestLinkButton)).click();
     }
@@ -914,8 +910,6 @@ public void performStageAction( String action, Map<String, String> optionalParam
             clickSubmitStatus();
     }
 }
-
-
 
 
  public void clickOnTab(String tabName) {
