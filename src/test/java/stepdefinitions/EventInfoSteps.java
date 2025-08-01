@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -142,7 +143,10 @@ public void i_perform_stage_action_without_parameters(String action) throws Inte
 
 
 
-
+@Given("I click on {string} tab button")
+public void i_click_on_tab_button(String string) {
+eventInfoPage.clickRulesTabBtn();
+}
 
 @When("^I create a rule with the following parameters:$")
 public void i_create_rule_with_parameters(DataTable dataTable) throws InterruptedException {
@@ -150,18 +154,48 @@ public void i_create_rule_with_parameters(DataTable dataTable) throws Interrupte
 
     String when = params.get("when");
     boolean isMatching = params.get("conditionType").equalsIgnoreCase("matching");
+
     String conditionField = params.getOrDefault("field", "");
     String conditionOperator = params.getOrDefault("operator", "");
     String conditionValue = params.getOrDefault("value", "");
-    String conditionMode = params.getOrDefault("mode", "positive");
-    String actionsRaw = params.get("actions"); // comma-separated
-    List<String> actions = Arrays.stream(actionsRaw.split(","))
-                                 .map(String::trim)
-                                 .collect(Collectors.toList());
-    String template = params.getOrDefault("template", "");
 
-    eventInfoPage.createRule(when, isMatching, conditionField, conditionOperator, conditionValue, conditionMode, actions, template);
+    // Handle both 'actions' and 'positiveActions' gracefully
+    List<String> positiveActions = Arrays.stream(
+        params.getOrDefault("positiveActions", params.getOrDefault("actions", ""))
+              .split(","))
+        .map(String::trim)
+        .filter(s -> !s.isEmpty())
+        .collect(Collectors.toList());
+
+    List<String> negativeActions = isMatching
+        ? Arrays.stream(params.getOrDefault("negativeActions", "")
+              .split(","))
+              .map(String::trim)
+              .filter(s -> !s.isEmpty())
+              .collect(Collectors.toList())
+        : new ArrayList<>();
+
+    String positiveTemplate = params.getOrDefault("positiveTemplate", params.getOrDefault("template", params.getOrDefault("templates", "")));
+    String negativeTemplate = isMatching
+        ? params.getOrDefault("negativeTemplate", "")
+        : "";
+
+    eventInfoPage.createRule(
+        when,
+        isMatching,
+        conditionField,
+        conditionOperator,
+        conditionValue,
+        positiveActions,
+        negativeActions,
+        positiveTemplate,
+        negativeTemplate
+    );
+
+    Thread.sleep(2000);
 }
+
+
 
 
 
