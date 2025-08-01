@@ -185,10 +185,47 @@ Scenario: Perform a stage action - waitlist candidate
 
 
 @ruleCreation
-Scenario: Create a rule with matching condition and multiple actions
+Scenario: Create a rule with for all condition
   Given I am inside the event page for "GG Campus Drive 280804"
   And I navigate to "Stages" tab in the event
-  And I click on "Screening" stage
+  And I click on "Eligibility Check" stage
+  And I click on "Rules" tab button
+  When I create a rule with the following parameters:
+    | when          | Candidate Form Submit       |
+    | conditionType | all                         |
+    | actions       | Send Email                  |
+    | templates     | Interview -2                |
+
+
+
+
+@ruleCreation2
+Scenario: Create a rule with matching condition and single actions
+  Given I am inside the event page for "GG Campus Drive 280804"
+  And I navigate to "Stages" tab in the event
+  And I click on "Eligibility Check" stage
+  And I click on "Rules" tab button
+  When I create a rule with the following parameters:
+    | when             | Candidate Form Submit                    |
+    | conditionType    | matching                                 |
+    | field            | Email ID                                 |
+    | operator         | ==                                       |
+    | value            | naveen@examly.in                         |
+    | positiveActions  | Send Email                               |
+    | positiveTemplate | Documentation Submit Request Mail -dev   |
+    | negativeActions  | Send Email                               |
+    | negativeTemplate | Job Rejection Mail-dev                   |
+
+
+
+
+
+@ruleCreation3
+Scenario: Create a rule with matching condition and single actions
+  Given I am inside the event page for "GG Campus Drive 280804"
+  And I navigate to "Stages" tab in the event
+  And I click on "Eligibility Check" stage
+  And I click on "Rules" tab button
   When I create a rule with the following parameters:
     | when          | Candidate Form Submit         |
     | conditionType | matching                      |
@@ -196,5 +233,5 @@ Scenario: Create a rule with matching condition and multiple actions
     | operator      | ==                            |
     | value         | naveen@examly.in              |
     | mode          | positive                      |
-    | actions       | Send Mail, Move Stage         |
-    | template      | Default Mail Template         |
+    | actions       | Send Email, Move Stage         |
+    | template      | Documentation Submit Request Mail -dev, Screening         |

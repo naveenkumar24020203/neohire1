@@ -273,13 +273,16 @@ public class EventInfoPage {
     @FindBy(xpath = "//button[normalize-space()='Rules']")
     private WebElement rulesTabBtn;
 
+        @FindBy(xpath = "//button[normalize-space()='Add Rule']")
+    private WebElement addRuleBtn;
+
 @FindBy(xpath = "//p-dropdown[contains(@class,'ruleSet-trigger')]//div[contains(@class,'p-dropdown-trigger')]")
 private WebElement ruleWhenDropdown;
 
-@FindBy(xpath = "(//label[@for='20']/preceding-sibling::p-radiobutton//div[@data-pc-name='radiobutton'])[1]")
+@FindBy(xpath = "(//label[text()='Matching Condition']/preceding-sibling::p-radiobutton//div[@data-pc-name='radiobutton'])")
 private WebElement matchingConditionRadio;
 
-@FindBy(xpath = "(//label[@for='20']/preceding-sibling::p-radiobutton//div[@data-pc-name='radiobutton'])[2]")
+@FindBy(xpath = "(//label[text()='For All']/preceding-sibling::p-radiobutton//div[@data-pc-name='radiobutton'])[2]")
 private WebElement forAllRadio;
 
 @FindBy(xpath = "//div[contains(@class,'conditionSet-individual')]//p-dropdown[1]//div[contains(@class,'p-dropdown-trigger')]")
@@ -333,8 +336,23 @@ private WebElement saveRuleButton;
 
 
 
+public void clickRulesTabBtn() {
+    rulesTabBtn.click();
+}
 
 
+public void clickAddRuleBtn() {
+    addRuleBtn.click();
+}
+
+    private void clickNegativeConditionButton() {
+        positiveConditionButton.click();
+    }
+
+
+    private void clickPositiveConditionButton() {
+        negativeConditionButton.click();
+    }
 
 
 public void selectActions(List<String> actions) throws InterruptedException {
@@ -393,8 +411,7 @@ public void clickRemoveCondition() {
 
 
 public void selectRuleTemplate(String templateName) throws InterruptedException {
-    ElementUtils.clickAndSelectDropdownValue(driver, ruleTemplateDropdown, templateName);
-}
+ElementUtils.searchAndSelectFromDropdown(ruleTemplateDropdown,searchInDropDown,templateName,driver);}
 
 
 public void clickSaveRule() {
@@ -415,25 +432,51 @@ public void createRule(
     String conditionField,
     String conditionOperator,
     String conditionValue,
-    String conditionMode, // "positive" or "negative"
-    List<String> actions,
-    String template // Optional, pass null if not needed
+    List<String> positiveActions,
+    List<String> negativeActions,
+    String positiveTemplate,
+    String negativeTemplate
 ) throws InterruptedException {
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+    // Step 0: If existing rule exists, click "Add Rule"
+    List<WebElement> existingRules = driver.findElements(By.cssSelector("div.ruleSet-summary"));
+    if (!existingRules.isEmpty()) {
+        System.out.println("✅ Existing rule(s) found, adding new rule...");
+        clickAddRuleBtn();
+        wait.until(ExpectedConditions.visibilityOf(ruleWhenDropdown));
+        Thread.sleep(800);
+    }
 
     selectWhenTrigger(whenOption);
     selectConditionType(isMatching);
 
     if (isMatching) {
         enterMatchingCondition(conditionField, conditionOperator, conditionValue);
+
+        // Positive flow
+        clickPositiveConditionButton();
+        selectActions(positiveActions);
+        if (positiveTemplate != null && !positiveTemplate.isEmpty()) {
+            selectRuleTemplate(positiveTemplate);
+        }
+
+        // Negative flow
+        clickNegativeConditionButton();
+        selectActions(negativeActions);
+        if (negativeTemplate != null && !negativeTemplate.isEmpty()) {
+            selectRuleTemplate(negativeTemplate);
+        }
+
+    } else {
+        // For all: only one action set (positive)
+        selectActions(positiveActions);
+        if (positiveTemplate != null && !positiveTemplate.isEmpty()) {
+            selectRuleTemplate(positiveTemplate);
+        }
     }
 
-    setConditionMode(conditionMode);
-    selectActions(actions);
-
-    if (template != null && !template.isEmpty()) {
-        selectRuleTemplate(template);
-    }
-
+    Thread.sleep(500);
     clickSaveRule();
 }
 
@@ -530,7 +573,12 @@ public void createRule(
 
 
 
+
+
+
    
+
+
     public void clickStageByName(String stageName) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         String xpath = "//div[contains(@class,'stage')]//p/text()[normalize-space(.)='" + stageName + "']/parent::*";

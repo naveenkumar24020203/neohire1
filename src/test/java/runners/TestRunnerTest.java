@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
         "html:target/cucumber-report.html",    
     },
     monochrome = true,
-    tags = "@stageAction8" //@event, tabnav, selectCandidates, eventDelete, eventCreate, stageAction, candidate
+    tags = "@ruleCreation2" //@event, tabnav, selectCandidates, eventDelete, eventCreate, stageAction, candidate
 )
 
 public class TestRunnerTest {
