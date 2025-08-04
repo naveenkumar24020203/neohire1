@@ -80,8 +80,10 @@ public class RoleSteps {
     }
 
     @Then("I should see a success message {string}")
-    public void i_should_see_success_message(String expectedMessage) {
+    public void i_should_see_success_message(String expectedMessage) throws InterruptedException {
         Assert.assertTrue("Success message not displayed!", rolePage.isSuccessMessageVisible());
         logger.info("Verified success message: {}", expectedMessage);
+        driver.navigate().refresh();
+        Thread.sleep(3000);
     }
 }
