@@ -77,20 +77,32 @@ public class RolePage {
     Thread.sleep(100);
     }
 
-    public void selectCountry(String country) throws InterruptedException{
-        ElementUtils.selectCustomDropdownOption(driver, "Search country...", country);
+public void selectCountry(String country) throws InterruptedException {
+    WebElement dropdown = driver.findElement(By.xpath("//input[@placeholder='Search country...']"));
+    dropdown.sendKeys(country);
+    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", dropdown);
+    ElementUtils.selectCustomDropdownOption(driver, "Search country...", country);
     Thread.sleep(100);
-    }
+}
 
-    public void selectState(String state)throws InterruptedException{
-        ElementUtils.selectCustomDropdownOption(driver, "Search state...", state);
+public void selectState(String state) throws InterruptedException {
+    WebElement dropdown = driver.findElement(By.xpath("//input[@placeholder='Search state...']"));
+        dropdown.sendKeys(state);
+
+    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", dropdown);
+    ElementUtils.selectCustomDropdownOption(driver, "Search state...", state);
     Thread.sleep(100);
-    }
+}
 
-    public void selectCity(String city)throws InterruptedException{
-        ElementUtils.selectCustomDropdownOption(driver, "Search city...", city);
+public void selectCity(String city) throws InterruptedException {
+    WebElement dropdown = driver.findElement(By.xpath("//input[@placeholder='Search city...']"));
+        dropdown.sendKeys(city);
+
+    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", dropdown);
+    ElementUtils.selectCustomDropdownOption(driver, "Search city...", city);
     Thread.sleep(500);
-    }
+}
+
 
     public void enterBusinessUnit(String businessUnit)throws InterruptedException{
         wait.until(ExpectedConditions.visibilityOf(businessUnitField)).clear();
@@ -98,10 +110,12 @@ public class RolePage {
     Thread.sleep(500);
     }
 
-    public void clickSaveButton() throws InterruptedException {
-        wait.until(ExpectedConditions.elementToBeClickable(saveBtn)).click();
-        Thread.sleep(150);
-    }
+public void clickSaveButton() throws InterruptedException {
+    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", saveBtn);
+    wait.until(ExpectedConditions.elementToBeClickable(saveBtn)).click();
+    Thread.sleep(150);
+}
+
 
     public boolean isSuccessMessageVisible() {
     try {

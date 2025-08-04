@@ -102,7 +102,12 @@ public class EventPage {
     private WebElement deleteEventButton;
     // ---------- ACTIONS ----------
 
-    public void navigateToEventsPage() {
+
+    public void navigateToEventsPage() throws InterruptedException {
+        Thread.sleep(1500);
+                ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='75%'");
+        Thread.sleep(1500);
+
         NavigationUtils.navigateToSideMenu(BaseTest.getDriver(), "Manage Events");
     }
 

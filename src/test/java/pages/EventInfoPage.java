@@ -273,6 +273,9 @@ public class EventInfoPage {
     @FindBy(xpath = "//button[normalize-space()='Rules']")
     private WebElement rulesTabBtn;
 
+        @FindBy(xpath = "//button[normalize-space()='Shortlisted']")
+    private WebElement shortlistedTabBtn;
+
         @FindBy(xpath = "//button[normalize-space()='Add Rule']")
     private WebElement addRuleBtn;
 
@@ -327,6 +330,9 @@ public void clickRulesTabBtn() {
     rulesTabBtn.click();
 }
 
+public void clickShortlistedTabBtn() {
+    rulesTabBtn.click();
+}
 
 public void clickAddRuleBtn() {
     addRuleBtn.click();

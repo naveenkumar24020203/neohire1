@@ -73,7 +73,10 @@ public class CandidatePage {
     private WebElement sendInviteButton;
 
 
-    public void navigateToCandidatePage(){
+    public void navigateToCandidatePage() throws InterruptedException{
+                Thread.sleep(1500);
+                ((JavascriptExecutor) driver).executeScript("document.body.style.zoom='75%'");
+        Thread.sleep(1500);
                 NavigationUtils.navigateToSideMenu(BaseTest.getDriver(), "Manage Candidate");
 
     }

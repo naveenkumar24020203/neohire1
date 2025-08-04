@@ -10,7 +10,7 @@ public class CandidateSteps extends BaseTest {
     CandidatePage candidatePage = new CandidatePage(driver);
 
     @Given("I am on the Canditate page")
-    public void i_am_on_the_canditate_page() {
+    public void i_am_on_the_canditate_page() throws InterruptedException {
         candidatePage.navigateToCandidatePage();
     }
 

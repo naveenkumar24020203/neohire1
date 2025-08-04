@@ -107,14 +107,8 @@ public class EventInfoSteps {
     public void i_click_on_stage(String string) throws InterruptedException {
         eventInfoPage.clickStageByName(string);
         Thread.sleep(400);
-    }
 
-    @And("In {string} stage I click on {string} option")
-    public void in_stage_i_click_on_option(String stageName, String optionName) throws InterruptedException {
-        eventInfoPage.clickStageByName(stageName);
 
-        eventInfoPage.clickStageMenuOption(stageName,optionName);
-        Thread.sleep(2000);
     }
 
     @And("I change the name to {string}")
