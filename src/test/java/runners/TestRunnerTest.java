@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
     },
     monochrome = true,
     publish = true,
-    tags = "@smoke" //@event, tabnav, selectCandidates, eventDelete, eventCreate, stageAction, candidate, eventCreate, smoke
+    tags = "@tabnav" //@event, tabnav, selectCandidates, eventDelete, eventCreate, stageAction, candidate, eventCreate, smoke
 )
 
 public class TestRunnerTest {
