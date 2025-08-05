@@ -287,7 +287,7 @@ public boolean isEventCreatedSuccessfully() {
         String optionText = option.getText().trim();
         if (optionText.equals(visibleText)) {
             option.click();
-                Thread.sleep(4000);
+                Thread.sleep(1000);
 
             return;
         }

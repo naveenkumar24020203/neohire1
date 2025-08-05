@@ -483,7 +483,7 @@ public void createRule(
         System.out.println("✅ Existing rule(s) found, adding new rule...");
         clickAddRuleBtn();
         wait.until(ExpectedConditions.visibilityOf(ruleWhenDropdown));
-        Thread.sleep(800);
+        Thread.sleep(500);
     }
 
     // Step 1: When and condition
@@ -546,7 +546,7 @@ public void selectActionsWithTemplates(List<String> actions, List<String> templa
 
         // 🧾 Step 2: Select Template if given
         if (!template.isEmpty()) {
-            Thread.sleep(800); // Let dropdown appear/render
+            Thread.sleep(500); // Let dropdown appear/render
 
             WebElement templateDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
                 "//div[contains(@class,'stage-actions-dropdown')]//p-dropdown[.//span[normalize-space()=''] or .//span[text()=' ']]/div[contains(@class,'p-dropdown')]/div[@role='button']"
@@ -596,7 +596,7 @@ public void selectActionsWithTemplates(List<String> actions, List<String> templa
         WebElement tickIcon = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//em[contains(@class, 'pi-check') and contains(@class, 'rename-action_icon')]")));
         tickIcon.click();
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
     }
 
@@ -755,7 +755,7 @@ public void selectInterviewDate(String date) throws InterruptedException {
 
     By dobCalendarTrigger = By.xpath("//button[@aria-label='Choose Date']");
     DateTimePickerUtils.selectDateOnly(driver, dobCalendarTrigger, year, month, day);
-    Thread.sleep(1000);
+    Thread.sleep(400);
 }
 
     
@@ -990,7 +990,7 @@ public void performStageAction( String action, Map<String, String> optionalParam
 
     // Save Stage
     saveStageButton.click();
-    Thread.sleep(2000);
+    Thread.sleep(1500);
 }
 
 
@@ -1021,7 +1021,7 @@ public void performStageAction( String action, Map<String, String> optionalParam
         String optionText = option.getText().trim();
         if (optionText.equals(visibleText)) {
             option.click();
-                Thread.sleep(4000);
+                Thread.sleep(300);
 
             return;
         }
@@ -1051,7 +1051,7 @@ public void performStageAction( String action, Map<String, String> optionalParam
             emailSearchInput.sendKeys(Keys.ENTER); // If Enter triggers the search
 
             // Optional: Wait for results to load
-            Thread.sleep(1000); // or use wait for specific result row
+            Thread.sleep(500); // or use wait for specific result row
 
         } catch (Exception e) {
             throw new RuntimeException("❌ Failed to search candidate by email: " + email, e);

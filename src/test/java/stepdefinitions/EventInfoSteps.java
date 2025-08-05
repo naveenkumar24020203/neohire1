@@ -43,6 +43,8 @@ public class EventInfoSteps {
     @And("I search and click on event {string}")
     public void iSearchAndClickOnEvent(String eventName) throws InterruptedException {
         eventPage.navigateToEventsPage(); // Optional if not already on Event page
+                Thread.sleep(1000); // Add wait if table takes time to load
+
         eventPage.searchEvent(eventName);
         Thread.sleep(1000); // Add wait if table takes time to load
         eventPage.clickEvent(eventName);
@@ -51,23 +53,23 @@ public class EventInfoSteps {
     @And("I create a {string} stage named {string} with dropdown {string} and link {string}")
     public void iCreateStageWithDropdownAndLink(String stageType, String stageName, String dropdownValue, String linkValue) throws InterruptedException {
         eventInfoPage.clickAddStage();
-        Thread.sleep(2000);
+        Thread.sleep(1500);
         eventInfoPage.createStage(stageType, stageName, dropdownValue, linkValue);
         Thread.sleep(200);
     }   
 
-    @And("I create a {string} stage named {string} with dropdown {string}")
+    @And("I create a {string} stage named {string} with dropdown {string} ")
     public void iCreateStageWithDropdownOnly(String stageType, String stageName, String dropdownValue) throws InterruptedException {
         eventInfoPage.clickAddStage();
-        Thread.sleep(2000);
+        Thread.sleep(1500);
         eventInfoPage.createStage(stageType, stageName, dropdownValue, null);
         Thread.sleep(200);
     }
 
-    @And("I create a {string} stage named {string}")
+    @And("I create a {string} stage named {string}  ")
     public void iCreateStageWithNameOnly(String stageType, String stageName) throws InterruptedException {
         eventInfoPage.clickAddStage();
-        Thread.sleep(2000);
+        Thread.sleep(1500);
         eventInfoPage.createStage(stageType, stageName, null, null);
         Thread.sleep(200);
     }   
@@ -129,13 +131,13 @@ public class EventInfoSteps {
 public void i_perform_stage_action_with_parameters(String action, io.cucumber.datatable.DataTable dataTable) throws InterruptedException {
     Map<String, String> params = dataTable.asMap(String.class, String.class);
     eventInfoPage.performStageAction(action, params);
-    Thread.sleep(4000);
+    Thread.sleep(1000);
 }
 
 @When("I perform stage action {string} without parameters")
 public void i_perform_stage_action_without_parameters(String action) throws InterruptedException {
     eventInfoPage.performStageAction(action, new HashMap<>());  // Empty params map
-        Thread.sleep(4000);
+        Thread.sleep(1000);
 
 }
 
