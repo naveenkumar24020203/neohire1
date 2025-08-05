@@ -61,7 +61,6 @@ public class Hooks {
 
 @AfterAll
 public static void afterAllTests() {
-    System.out.println("📦 Test execution complete. Flushing ExtentReports and attempting to send PDF report...");
 
     // 🔄 Flush reports so the PDF gets generated
     ExtentService.getInstance().flush();
@@ -77,7 +76,6 @@ public static void afterAllTests() {
     Arrays.sort(sparkDirs, Comparator.comparingLong(File::lastModified).reversed());
     File latestSparkDir = sparkDirs[0];
 
-    // 🔍 Look inside the latest SparkReport for the generated PDF
     File pdfFile = new File(latestSparkDir, "test-output/PDFReport/PdfReport.pdf");
 
     int attempts = 0;
@@ -89,11 +87,9 @@ public static void afterAllTests() {
     }
 
     if (!pdfFile.exists()) {
-        System.out.println("⚠️ PdfReport.pdf still not found after waiting.");
         return;
     }
 
-    System.out.println("📧 Sending PDF report from: " + pdfFile.getAbsolutePath());
     ElementUtils.sendEmailWithAttachment(
         "s.naveenkumar@iamneo.ai",
         "Automation PDF Report",
