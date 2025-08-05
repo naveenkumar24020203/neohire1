@@ -111,6 +111,8 @@ public void selectCity(String city) throws InterruptedException {
     }
 
 public void clickSaveButton() throws InterruptedException {
+        Thread.sleep(500);
+
     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", saveBtn);
     wait.until(ExpectedConditions.elementToBeClickable(saveBtn)).click();
     Thread.sleep(150);

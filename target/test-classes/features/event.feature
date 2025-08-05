@@ -50,3 +50,14 @@ Examples:
 | GG Campus Drive 280804 |
 | GG Campus Drive 280805 |
 | GG Campus Drive 280806 |
+
+
+
+
+@eventCreatewithEmptyValue
+Scenario Outline: Create Event with empty data
+  Given I am on the Event page
+  And I select "100" items per page in the event table
+  When I click on the "New Event" button on Event page
+  And I submit the event
+  Then I should see event should not be created

@@ -94,6 +94,7 @@ Scenario: Perform a stage action - send mail
   And I search and select candidate with email "naveen@examly.in"
   When I perform stage action "send mail" with the following parameters:
     | template | User Welcome Mail |
+  Then I should see a success message for stage action
 
 
 @stageAction2
@@ -105,6 +106,7 @@ Scenario: Perform a stage action - move stage
   When I perform stage action "move stage" with the following parameters:
     | targetStage | Offer     |
     | remarks     | Promoted to next round |
+  Then I should see a success message for stage action
 
 
 @stageAction3
@@ -120,6 +122,7 @@ Scenario: Perform a stage action - send documentation link
     | docPoc      | Muniyappan Mani             |
     | deadline    | 2 Hours           |
     | template    | Documentation Submit Request Mail -dev   |
+  Then I should see a success message for stage action
 
 
 
@@ -133,6 +136,7 @@ Scenario: Perform a stage action - send interview link
   | date      | 02-08-2025 |
   | startTime | 10:30         |
   | duration  | 1h 0m        |
+  Then I should see a success message for stage action
 
 
 @stageAction5
@@ -146,11 +150,12 @@ Scenario: Perform a stage action - send interview venue
   | startTime | 02:00       |
   | duration  | 30m         |
   | venue     | Room 302    |
+  Then I should see a success message for stage action
 
 
 @stageAction6
 Scenario: Perform a stage action - send offer
-  Given I am inside the event page for "GG Campus Drive 040804w"
+  Given I am inside the event page for "GG Campus Drive 280804"
   And I navigate to "Stages" tab in the event
   And I click on "Offer" stage 
   And I search and select candidate with email "naveen@examly.in"
@@ -159,6 +164,7 @@ Scenario: Perform a stage action - send offer
     | jobRole       | QA Engineer                   |
     | offerDeadline | 6 Hours             |
     | template      | Job Offer Mail -dev      |
+  Then I should see a success message for stage action
 
 
 @stageAction7
@@ -168,6 +174,7 @@ Scenario: Perform a stage action - Send Test Link
   And I click on "Test" stage
   And I search and select candidate with email "naveen@examly.in"
   When I perform stage action "Send Test Link" without parameters
+  Then I should see a success message for stage action
 
 
 @stageAction8
@@ -178,11 +185,12 @@ Scenario: Perform a stage action - waitlist candidate
   And I search and select candidate with email "naveen@examly.in"
   When I perform stage action "Offer Rejected" with the following parameters:
     | remarks | Candidate moved to Future Candidate due to role freeze |
+  Then I should see a success message for stage action
 
 
 
 
-@ruleCreation
+@ruleCreation1
 Scenario: Create a rule with for all condition
   Given I am inside the event page for "GG Campus Drive 040804w"
   And I navigate to "Stages" tab in the event
@@ -193,6 +201,7 @@ Scenario: Create a rule with for all condition
     | conditionType | all                         |
     | positiveActions       | Send Email                  |
     | positiveTemplate     | Interview -2                |
+  Then I should see a success message for rule creation
 
 
 @ruleCreation
@@ -211,6 +220,7 @@ Scenario: Create a rule with matching condition and single actions
     | positiveTemplate | Documentation Submit Request Mail -dev   |
     | negativeActions  | Send Email                               |
     | negativeTemplate | Job Rejection Mail-dev                   |
+  Then I should see a success message for rule creation
 
 
 @ruleCreation
@@ -229,6 +239,7 @@ Scenario: Create a rule with matching condition and single actions
       | positiveTemplate | Documentation Submit Request Mail -dev  |
       | negativeActions  | Send Email, Reject Candidate             |
       | negativeTemplate | Job Rejection Mail-dev                   |
+  Then I should see a success message for rule creation
 
 
 
@@ -248,6 +259,7 @@ Scenario: Create a rule with matching condition and single actions
     | positiveTemplate | Documentation Submit Request Mail -dev, Documentation Submit Request Mail -dev |
     | negativeActions  | Send Email, Send Email                         |
     | negativeTemplate | Job Rejection Mail-dev, Job Rejection Mail-dev |
+  Then I should see a success message for rule creation
 
 
 
@@ -270,6 +282,7 @@ Scenario: Create rule for Screening stage
     | conditionType    | all                                     |
     | positiveActions  | Send Email                              |
     | positiveTemplate | Documentation Submit Request Mail -dev |
+  Then I should see a success message for rule creation
 
 @ruleCreation
 Scenario: Create rule for Test stage
@@ -282,6 +295,7 @@ Scenario: Create rule for Test stage
     | conditionType    | all                       |
     | positiveActions  | Send Email                |
     | positiveTemplate | Test Link Mail -dev       |
+  Then I should see a success message for rule creation
 
 @ruleCreation
 Scenario: Create rule for Interview stage
@@ -294,6 +308,7 @@ Scenario: Create rule for Interview stage
     | conditionType    | all                              |
     | positiveActions  | Send Email                       |
     | positiveTemplate | Online Interview Invitation Mail-dev |
+  Then I should see a success message for rule creation
 
 @ruleCreation
 Scenario: Create rule for Offline Interview stage
@@ -306,6 +321,7 @@ Scenario: Create rule for Offline Interview stage
     | conditionType    | all                                 |
     | positiveActions  | Send Email                          |
     | positiveTemplate | Offline Interview Invitation Mail -dev |
+  Then I should see a success message for rule creation
 
 @ruleCreation
 Scenario: Create rule for Offer stage
@@ -318,6 +334,7 @@ Scenario: Create rule for Offer stage
     | conditionType    | all                       |
     | positiveActions  | Send Email                |
     | positiveTemplate | Job Offer Mail -dev       |
+  Then I should see a success message for rule creation
 
 @ruleCreation
 Scenario: Create rule for Onboarding stage
@@ -330,3 +347,4 @@ Scenario: Create rule for Onboarding stage
     | conditionType    | all                       |
     | positiveActions  | Send Email                |
     | positiveTemplate | Job Rejection Mail-dev    |
+  Then I should see a success message for rule creation

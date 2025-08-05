@@ -131,8 +131,9 @@ public class EventInfoPage {
 
     private static final By commonSearchInput = By.xpath("//input[@role='searchbox']");
 
-    @FindBy(xpath = "//div[text()='Success']")
+    @FindBy(xpath = "//div[contains(text(), 'Success')]")
     private WebElement stageSuccessMsg;
+
 
     @FindBy(css = "span[role='combobox']")
     private WebElement itemsPerPageDropdown;
@@ -993,7 +994,7 @@ public void performStageAction( String action, Map<String, String> optionalParam
 }
 
 
-    public boolean isStageCreatedSuccessfully() {
+    public boolean isCreatedSuccessfully() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     try {
