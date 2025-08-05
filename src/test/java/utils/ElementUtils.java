@@ -2,9 +2,18 @@ package utils;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
+import jakarta.mail.Transport; 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.List;
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
+import java.util.Properties;
+
 
 public class ElementUtils {
     private static WebDriver driver;
@@ -403,6 +412,97 @@ public static boolean clickAndSelectDropdownValueWithRetry(WebDriver driver, Web
 }
 
 
+
+public static void sendEmailWithAttachment(String toEmail, String subject, String body, String attachmentPath) {
+    final String fromEmail = "naveeniamneo112@gmail.com";
+    final String password = "lgzbeyqgfmwtccnw"; // app password with no spaces
+ 
+    Properties props = new Properties();
+    props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.host", "smtp.gmail.com");
+    props.put("mail.smtp.port", "587");
+ 
+ Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new jakarta.mail.PasswordAuthentication(fromEmail, password);
+            }
+        });
+ 
+   try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(fromEmail));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            message.setSubject(subject);
+
+            BodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setText(body);
+
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
+
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            attachmentPart.attachFile(new File(attachmentPath));
+            multipart.addBodyPart(attachmentPart);
+
+            message.setContent(multipart);
+
+            Transport.send(message);
+            System.out.println("📧 PDF report emailed to: " + toEmail);
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Failed to send email: " + e.getMessage(), e);
+        }
+    }
+ 
+ 
+ 
+ 
+public static void runPuppeteerAndEmailReport(String nodeScriptPath, String pdfPath, String toEmail) {
+    try {
+        System.out.println("🌐 Launching Puppeteer to generate PDF...");
+ 
+        // Prepare Node.js Puppeteer command
+        ProcessBuilder pb = new ProcessBuilder("node", nodeScriptPath);
+        pb.redirectErrorStream(true); // Merge stderr with stdout
+ 
+        Process process = pb.start();
+ 
+        // Read and print Puppeteer script output
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println("📄 " + line);
+            }
+        }
+ 
+        int exitCode = process.waitFor();
+        if (exitCode == 0) {
+            System.out.println("✅ Puppeteer PDF generation successful: " + pdfPath);
+ 
+            // Send email with the generated PDF
+            ElementUtils.sendEmailWithAttachment(
+                toEmail,
+                "📄 Automation Test Report",
+                "Hi,\n\nPlease find attached the PDF report for the recent test execution.",
+                pdfPath
+            );
+ 
+            System.out.println("📬 PDF Report sent successfully to: " + toEmail);
+        } else {
+            System.err.println("❌ Puppeteer script failed with exit code: " + exitCode);
+        }
+ 
+    } catch (IOException | InterruptedException e) {
+        System.err.println("⚠️ Failed to convert/send report: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+ 
+ 
+ 
+ 
+ 
 
 }
 
