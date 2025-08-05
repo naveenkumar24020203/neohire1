@@ -18,7 +18,7 @@ public class Hooks {
         System.out.println("-------------------------------------------------");
         System.out.println("⏳ Starting Scenario: " + scenario.getName());
 
-        BaseTest.initializeDriver();
+        BaseTest.initializeDriver(ConfigReader.getProperty("browser"));
         WebDriver driver = BaseTest.getDriver();
 
         driver.get(ConfigReader.getProperty("app.url"));
