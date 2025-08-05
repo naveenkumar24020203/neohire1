@@ -131,8 +131,9 @@ public class EventInfoPage {
 
     private static final By commonSearchInput = By.xpath("//input[@role='searchbox']");
 
-    @FindBy(xpath = "//div[text()='Success']")
+    @FindBy(xpath = "//div[contains(text(), 'Success')]")
     private WebElement stageSuccessMsg;
+
 
     @FindBy(css = "span[role='combobox']")
     private WebElement itemsPerPageDropdown;
@@ -338,10 +339,7 @@ public void clickAddRuleBtn() {
     addRuleBtn.click();
 }
 
-
-
-
-        public void clickNegativeConditionButton() {
+    public void clickNegativeConditionButton() {
     try {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(negativeConditionButton));
@@ -466,8 +464,6 @@ public void clickSaveRule() {
 }
 
 
-
-
 public void createRule(
     String whenOption,
     boolean isMatching,
@@ -561,27 +557,6 @@ public void selectActionsWithTemplates(List<String> actions, List<String> templa
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public void clickStageByName(String stageName) {
@@ -1019,7 +994,7 @@ public void performStageAction( String action, Map<String, String> optionalParam
 }
 
 
-    public boolean isStageCreatedSuccessfully() {
+    public boolean isCreatedSuccessfully() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     try {

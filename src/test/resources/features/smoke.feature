@@ -3,16 +3,16 @@ Feature: Smoke Test for Role creation, Event creation, and Candidate Invite
 
   Scenario Outline: Create a new role and event successfully
     Given I am on the Roles page
-    # When I click on the "New role" button
-    # And I enter role name "<roleName>"
-    # And I enter role type "<roleType>"
-    # And I enter work mode as "<workMode>"
-    # And I enter country as "<country>"
-    # And I enter state as "<state>"
-    # And I enter city as "<city>"
-    # And I enter business unit as "<businessUnit>"
-    # And I click the "Save" button
-    # Then I should see a success message "Role created successfully"
+    When I click on the "New role" button
+    And I enter role name "<roleName>"
+    And I enter role type "<roleType>"
+    And I enter work mode as "<workMode>"
+    And I enter country as "<country>"
+    And I enter state as "<state>"
+    And I enter city as "<city>"
+    And I enter business unit as "<businessUnit>"
+    And I click the "Save" button
+    Then I should see a success message "Role created successfully"
 
     Then I am on the Event page
     When I click on the "New Event" button on Event page
@@ -41,25 +41,25 @@ Feature: Smoke Test for Role creation, Event creation, and Candidate Invite
 
 
 
-#   Scenario Outline: Invite candidate to the created event
-#     Given I am on the Canditate page
-#     And I click on Invite Candidate button
-#     And I select "<inviteType>" as option
-#     And I enter First name as "<firstName>"
-#     And I enter Last name as "<lastName>"
-#     And I enter Email Id as "<emailId>"
-#     And I select Gender as "<gender>"
-#     And I enter Date of birth as "<dob>"
-#     And I enter mobile number as "<mobile>"
-#     And I select Event category as "<eventCategory>"
-#     And I select Event name as "<eventName>"
-#     And I select Source type as "<sourceType>"
-#     And I select Source name as "<sourceName>"
-#     Then I click Send Invite button
+  Scenario Outline: Invite candidate to the created event
+    Given I am on the Canditate page
+    And I click on Invite Candidate button
+    And I select "<inviteType>" as option
+    And I enter First name as "<firstName>"
+    And I enter Last name as "<lastName>"
+    And I enter Email Id as "<emailId>"
+    And I select Gender as "<gender>"
+    And I enter Date of birth as "<dob>"
+    And I enter mobile number as "<mobile>"
+    And I select Event category as "<eventCategory>"
+    And I select Event name as "<eventName>"
+    And I select Source type as "<sourceType>"
+    And I select Source name as "<sourceName>"
+    Then I click Send Invite button
 
-#     Examples:
-#       | inviteType    | firstName    | lastName | emailId               | gender | dob         | mobile     | eventCategory | eventName               | sourceType | sourceName |
-#       | Single-Invite | Naveen Kumar | S        | naveen+02@examly.in   | Male   | 24-02-2003  | 8855885548 | Technical     | GG Campus Drive 04080405 | Data       | Linkedin    |
+    Examples:
+      | inviteType    | firstName    | lastName | emailId               | gender | dob         | mobile     | eventCategory | eventName               | sourceType | sourceName |
+      | Single-Invite | Naveen Kumar | S        | naveen+02@examly.in   | Male   | 24-02-2003  | 8855885548 | Technical     | GG Campus Drive 04080405 | Data       | Linkedin    |
 
  Scenario: Create Screening stage
     Given I am inside the event page for "GG Campus Drive 04080405"

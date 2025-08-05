@@ -25,6 +25,8 @@ public class EventPage {
     // ---------- ELEMENTS ----------
     @FindBy(xpath = "//button[@label='New Event']")
     private WebElement createEventBtn;
+    @FindBy(xpath = "//div[@class='title-error ng-star-inserted']")
+    private WebElement mandatoryFieldErrorMsg;
 
     @FindBy(xpath = "//input[@formcontrolname='eventTitle']")
     private WebElement eventTitleField;
@@ -334,5 +336,17 @@ public void cloneEvent(String eventName) {
     WebElement confirmClone = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[normalize-space()='Confirm']")));
     confirmClone.click();
 }
+
+
+public boolean isMandatoryFieldErrorVisible() {
+    try {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOf(mandatoryFieldErrorMsg));
+        return mandatoryFieldErrorMsg.isDisplayed();
+    } catch (TimeoutException e) {
+        return false;
+    }
+}
+
 
 }

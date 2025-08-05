@@ -162,4 +162,11 @@ public void i_delete_the_event_named(String eventName) throws InterruptedExcepti
     eventPage.deleteEvent(eventName);
 }
 
+
+@Then("I should see event should not be created")
+public void i_should_see_event_should_not_be_created() {
+    Assert.assertTrue("Expected mandatory field error message is not visible!", eventPage.isMandatoryFieldErrorVisible());
+
+}
+
 }

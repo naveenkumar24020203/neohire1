@@ -74,9 +74,18 @@ public class EventInfoSteps {
 
     @Then("I should see a success message for stage creation")
     public void iShouldSeeSuccessMessageForStageCreation() {
-        Assert.assertTrue("Stage creation success message not visible", eventInfoPage.isStageCreatedSuccessfully());
+        Assert.assertTrue("Stage creation success message not visible", eventInfoPage.isCreatedSuccessfully());
     }
 
+        @Then("I should see a success message for stage action")
+    public void iShouldSeeSuccessMessageForStageAction() {
+        Assert.assertTrue("Stage creation success message not visible", eventInfoPage.isCreatedSuccessfully());
+    }
+
+            @Then("I should see a success message for rule creation")
+    public void iShouldSeeSuccessMessageForRuleCreation() {
+        Assert.assertTrue("Stage creation success message not visible", eventInfoPage.isCreatedSuccessfully());
+    }
     @And("I select {string} items per page in the Stages candidate list")
     public void i_select_items_per_table(String count) throws InterruptedException {
         eventPage.selectItemsPerPage(count);

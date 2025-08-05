@@ -4,6 +4,8 @@ import base.BaseTest;
 import io.cucumber.java.en.*;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
+
+import pages.EventPage;
 import pages.RolePage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ public class RoleSteps {
 
     WebDriver driver;
     RolePage rolePage;
+    EventPage eventPage = new EventPage(BaseTest.getDriver());
 
     @Given("I am on the Roles page")
     public void i_am_on_roles_page() {
@@ -86,4 +89,10 @@ public class RoleSteps {
         driver.navigate().refresh();
         Thread.sleep(3000);
     }
+
+    @Then("I should see role should not be created")
+public void i_should_see_role_should_not_be_created() {
+    Assert.assertTrue("Expected mandatory field error message is not visible!", eventPage.isMandatoryFieldErrorVisible());
+
+}
 }
