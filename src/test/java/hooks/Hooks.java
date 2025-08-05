@@ -2,14 +2,23 @@ package hooks;
 
 import base.BaseTest;
 import io.cucumber.java.After;
+import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+
+import com.aventstack.extentreports.service.ExtentService;
+
 import pages.LoginPage;
 import pages.OtpPage;
 import utils.ConfigReader;
+import utils.ElementUtils;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class Hooks {
 
@@ -22,7 +31,7 @@ public class Hooks {
         WebDriver driver = BaseTest.getDriver();
 
         driver.get(ConfigReader.getProperty("app.url"));
-            Thread.sleep(1000); 
+        Thread.sleep(1000);
 
         LoginPage loginPage = new LoginPage(driver);
         OtpPage otpPage = new OtpPage(driver);
@@ -49,4 +58,54 @@ public class Hooks {
 
         BaseTest.quitDriver();
     }
+
+@AfterAll
+public static void afterAllTests() {
+    System.out.println("📦 Test execution complete. Flushing ExtentReports and attempting to send PDF report...");
+
+    // 🔄 Flush reports so the PDF gets generated
+    ExtentService.getInstance().flush();
+
+    File sparkRoot = new File("test-output");
+    File[] sparkDirs = sparkRoot.listFiles((dir, name) -> name.startsWith("SparkReport"));
+
+    if (sparkDirs == null || sparkDirs.length == 0) {
+        System.out.println("⚠️ No SparkReport folder found.");
+        return;
+    }
+
+    Arrays.sort(sparkDirs, Comparator.comparingLong(File::lastModified).reversed());
+    File latestSparkDir = sparkDirs[0];
+
+    // 🔍 Look inside the latest SparkReport for the generated PDF
+    File pdfFile = new File(latestSparkDir, "test-output/PDFReport/PdfReport.pdf");
+
+    int attempts = 0;
+    while (!pdfFile.exists() && attempts < 20) {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ignored) {}
+        attempts++;
+    }
+
+    if (!pdfFile.exists()) {
+        System.out.println("⚠️ PdfReport.pdf still not found after waiting.");
+        return;
+    }
+
+    System.out.println("📧 Sending PDF report from: " + pdfFile.getAbsolutePath());
+    ElementUtils.sendEmailWithAttachment(
+        "s.naveenkumar@iamneo.ai",
+        "Automation PDF Report",
+        "Attached is the test execution report.",
+        pdfFile.getAbsolutePath()
+    );
+}
+
+
+
+
+
+
+
 }

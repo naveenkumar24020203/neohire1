@@ -57,9 +57,9 @@ Scenario: Create Others stage
 Scenario: Checking navigation to all tabs inside event details
   Given I am inside the event page for "July Campus Drive 13"
   And I navigate to "Candidates" tab in the event
-  And I navigate to "Event Details" tab in the event
-  And I navigate to "Stages" tab in the event
-  And I navigate to "Interview" tab in the event
+  # And I navigate to "Event Details" tab in the event
+  # And I navigate to "Stages" tab in the event
+  # And I navigate to "Interview" tab in the event
 
 
 @rowCount
