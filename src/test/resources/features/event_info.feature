@@ -188,8 +188,6 @@ Scenario: Perform a stage action - waitlist candidate
   Then I should see a success message for stage action
 
 
-
-
 @ruleCreation1
 Scenario: Create a rule with for all condition
   Given I am inside the event page for "GG Campus Drive 040804w"
@@ -239,8 +237,7 @@ Scenario: Create a rule with matching condition and single actions
       | positiveTemplate | Documentation Submit Request Mail -dev  |
       | negativeActions  | Send Email, Reject Candidate             |
       | negativeTemplate | Job Rejection Mail-dev                   |
-  Then I should see a success message for rule creation
-
+    Then I should see a success message for rule creation
 
 
 @ruleCreation
@@ -259,7 +256,7 @@ Scenario: Create a rule with matching condition and single actions
     | positiveTemplate | Documentation Submit Request Mail -dev, Documentation Submit Request Mail -dev |
     | negativeActions  | Send Email, Send Email                         |
     | negativeTemplate | Job Rejection Mail-dev, Job Rejection Mail-dev |
-  Then I should see a success message for rule creation
+     Then I should see a success message for rule creation
 
 
 

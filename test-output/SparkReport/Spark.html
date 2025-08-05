@@ -35,7 +35,7 @@
 <a href="#"><span class="badge badge-primary"></span></a>
 </li>
 <li class="m-r-10">
-<a href="#"><span class="badge badge-primary">Aug 5, 2025 09:37:39 am</span></a>
+<a href="#"><span class="badge badge-primary">Aug 5, 2025 10:55:58 am</span></a>
 </li>
 </ul>
 </div>
@@ -79,7 +79,7 @@
 <li class="dropdown">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-tag"></i></a>
 <ul id="tag-toggle" class="dropdown-menu dropdown-md p-v-0">
-<a class="dropdown-item" href="#">@roleCreatewithEmptyValue</a>
+<a class="dropdown-item" href="#">@candidate</a>
 </ul>
 </li>
 </ul>
@@ -90,9 +90,9 @@
           tag=""
           device="">
           <div class="test-detail">
-            <p class="name">Create Role</p>
+            <p class="name">Candidate Management in Event</p>
             <p class="text-sm">
-              <span>9:37:39 am</span> / <span>00:00:10:094</span>
+              <span>10:55:59 am</span> / <span>00:00:26:234</span>
               <span class="badge pass-bg log float-right">Pass</span>
             </p>
           </div>
@@ -100,10 +100,10 @@
 <div class="detail-head">
 <div class="p-v-10">
 <div class="info">
-<h5 class="test-status text-pass">Create Role</h5>
-<span class='badge badge-success'>08.05.2025 9:37:39 am</span>
-<span class='badge badge-danger'>08.05.2025 9:37:50 am</span>
-<span class='badge badge-default'>00:00:10:094</span>
+<h5 class="test-status text-pass">Candidate Management in Event</h5>
+<span class='badge badge-success'>08.05.2025 10:55:59 am</span>
+<span class='badge badge-danger'>08.05.2025 10:56:25 am</span>
+<span class='badge badge-default'>00:00:26:234</span>
 &middot; <span class='uri-anchor badge badge-default'>#test-id=1</span>
 <span title='Skip to the next failed step' class='badge badge-danger pointer float-right ne ml-1'><i class="fa fa-fast-forward"></i></span>
 <span title='Collapse all nodes' class='badge badge-default pointer float-right ct ml-1'><i class="fa fa-compress"></i></span>
@@ -116,28 +116,78 @@
   <div class="card">
     <div class="card-header" role="tab">
       <div class="card-title">
-        <div class="node" id="2"><span class="badge log pass-bg mr-2">Pass</span>Create role with invalid data</div>
+        <div class="node" id="2"><span class="badge log pass-bg mr-2">Pass</span>Invite single candidate</div>
       </div>
     </div>
         <div class="collapse">
           <div class="card-body">
-              <div class="step pass-bg" title="stepdefinitions.RoleSteps.i_am_on_roles_page()">
-                <span>Given I am on the Roles page</span>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_am_on_the_canditate_page()">
+                <span>Given I am on the Canditate page</span>
       <div>
       </div>
               </div>
-              <div class="step pass-bg" title="stepdefinitions.RoleSteps.i_click_on_the_button(java.lang.String)">
-                <span>When I click on the "New role" button</span>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_click_on_button()">
+                <span>And I click on Invite Candidate button</span>
       <div>
       </div>
               </div>
-              <div class="step pass-bg" title="stepdefinitions.RoleSteps.i_click_the_save_button(java.lang.String)">
-                <span>And I click the "Save" button</span>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_as_option(java.lang.String)">
+                <span>And I select "Single-Invite" as option</span>
       <div>
       </div>
               </div>
-              <div class="step pass-bg" title="stepdefinitions.RoleSteps.i_should_see_role_should_not_be_created()">
-                <span>Then I should see role should not be created</span>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_first_name_as(java.lang.String)">
+                <span>And I enter First name as "Naveen Kumar"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_last_name_as(java.lang.String)">
+                <span>And I enter Last name as "S"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_email_id_as(java.lang.String)">
+                <span>And I enter Email Id as "naveen+02@examly.in"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_gender_as(java.lang.String)">
+                <span>And I select Gender as "Male"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_date_of_birth_as(java.lang.String)">
+                <span>And I enter Date of birth as "24-02-2003"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_enter_mobile_number_as(java.lang.String)">
+                <span>And I enter mobile number as "8855885548"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_event_category_as(java.lang.String)">
+                <span>And I select Event category as "Technical"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_event_name_as(java.lang.String)">
+                <span>And I select Event name as "GG Campus Drive 2808"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_source_type_as(java.lang.String)">
+                <span>And I select Source type as "Data"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_select_source_name_as(java.lang.String)">
+                <span>And I select Source name as "Linkedin"</span>
+      <div>
+      </div>
+              </div>
+              <div class="step pass-bg" title="stepdefinitions.CandidateSteps.i_click_send_invite_button()">
+                <span>Then I click Send Invite button</span>
       <div>
       </div>
               </div>
@@ -169,12 +219,12 @@
 <span class="meta">
 <span class='badge log pass-bg'>1</span>
 </span>
-<p class="name">@roleCreatewithEmptyValue</p>
+<p class="name">@candidate</p>
 <p class="duration text-sm">1 tests</p>
 </div>
 <div class="test-contents d-none">
 <div class="info">
-<h4>@roleCreatewithEmptyValue</h4>
+<h4>@candidate</h4>
 <span status="pass" class='badge log pass-bg'>1 passed</span>
 </div>
 <table class='table table-sm mt-4'>
@@ -188,11 +238,11 @@
 <tbody>
 <tr class="tag-test-status" status="pass">
 <td><span class="badge log pass-bg">Pass</span></td>
-<td>09:37:39 am</td>
+<td>10:55:59 am</td>
 <td>
-<a href="#" class="linked" test-id='1' id='2'>Create role with invalid data</a>
+<a href="#" class="linked" test-id='1' id='2'>Invite single candidate</a>
 <div class="">
-<span class="badge badge-default">Create Role.Create role with invalid data</span>
+<span class="badge badge-default">Candidate Management in Event.Invite single candidate</span>
 </div>
 </td>
 </tr>
@@ -213,13 +263,13 @@
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0">Started</p>
-<h3>Aug 5, 2025 09:37:39 am</h3>
+<h3>Aug 5, 2025 10:55:58 am</h3>
 </div></div>
 </div>
 <div class="col-md-3">
 <div class="card"><div class="card-body">
 <p class="m-b-0">Ended</p>
-<h3>Aug 5, 2025 09:37:50 am</h3>
+<h3>Aug 5, 2025 10:56:25 am</h3>
 </div></div>
 </div>
 <div class="col-md-3">
@@ -290,7 +340,7 @@
 </div>
 </div>
 <div class="card-footer">
-<div><small data-tooltip='100%'><b>4</b> steps passed</small></div>
+<div><small data-tooltip='100%'><b>14</b> steps passed</small></div>
 <div>
 <small data-tooltip='0%'><b>0</b> steps failed,
 <b>0</b> skipped, <b data-tooltip='%'>0</b> others
@@ -309,7 +359,7 @@
 </div></div>
 <script>
 var timeline = {
-"Create Role":10.094
+"Candidate Management in Event":26.234
 };
 </script>
 <div class="row">
@@ -319,7 +369,7 @@ var timeline = {
 <div class="card-body pb-0 pt-0"><table class="table table-sm table-bordered">
 <thead><tr class="bg-gray"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th><th>Others</th><th>Passed %</th></tr></thead><tbody>
 <tr>
-<td>@roleCreatewithEmptyValue</td>
+<td>@candidate</td>
 <td>1</td>
 <td>0</td>
 <td>0</td>
@@ -346,7 +396,7 @@ warningChild: 0,
 skipChild: 0,
 infoChild: 0,
 grandChildCount: 5,
-passGrandChild: 4,
+passGrandChild: 14,
 failGrandChild: 0,
 warningGrandChild: 0,
 skipGrandChild: 0,

@@ -1,5 +1,5 @@
 @smoke
-Feature: Smoke Test for Role creation, Event creation, and Candidate Invite
+Feature: Smoke Test for Role creation, Event creation, Stage Creation and Candidate Invite
 
   Scenario Outline: Create a new role and event successfully
     Given I am on the Roles page
@@ -37,9 +37,7 @@ Feature: Smoke Test for Role creation, Event creation, and Candidate Invite
 
   Examples:
     | roleName        | roleType  | workMode | country | state      | city        | businessUnit | eventTitle            | eventStart           | eventEnd             | regStart            | regEnd              | jobRoles     | experience | minSalary | maxSalary | eventType  | eventCategory | emailTemplate       | registrationForm | institutionName                                                                                      | institutionAddress           |
-    | QACb Engineer    | Full Time | Hybrid   | India   | Tamil Nadu | Coimbatore  | uuhhd        | GG Campus Drive 04080405 | 2026-08-28 12:30 PM  | 2026-08-29 12:00 PM  | 2026-08-26 12:00 PM | 2026-08-27 12:00 PM | QACb Engineer | 2          | 300000    | 600000    | In-Campus | Technical     | Test Link            | demo Copy        | AAA COLLEGE OF ENGINEERING AND TECHNOLOGY, SIR VISHVESHWARIAH INSTITUE OF SCIENCE AND TECHNOLOGY | Addressssssssss              |
-
-
+    | QQQ Engineer   | Full Time | Hybrid   | India   | Tamil Nadu | Coimbatore  | uuhhd        | GG Campus Drive 0408202502 | 2026-08-28 12:30 PM  | 2026-08-29 12:00 PM  | 2026-08-26 12:00 PM | 2026-08-27 12:00 PM | QQQ Engineer | 2          | 300000    | 600000    | In-Campus | Technical     | Test Link            | demo Copy        | AAA COLLEGE OF ENGINEERING AND TECHNOLOGY, SIR VISHVESHWARIAH INSTITUE OF SCIENCE AND TECHNOLOGY | Addressssssssss              |
 
   Scenario Outline: Invite candidate to the created event
     Given I am on the Canditate page
@@ -52,139 +50,48 @@ Feature: Smoke Test for Role creation, Event creation, and Candidate Invite
     And I enter Date of birth as "<dob>"
     And I enter mobile number as "<mobile>"
     And I select Event category as "<eventCategory>"
-    And I select Event name as "<eventName>"
+    And I select Event name as "<eventTitle>"
     And I select Source type as "<sourceType>"
     And I select Source name as "<sourceName>"
     Then I click Send Invite button
 
     Examples:
-      | inviteType    | firstName    | lastName | emailId               | gender | dob         | mobile     | eventCategory | eventName               | sourceType | sourceName |
-      | Single-Invite | Naveen Kumar | S        | naveen+02@examly.in   | Male   | 24-02-2003  | 8855885548 | Technical     | GG Campus Drive 04080405 | Data       | Linkedin    |
+      | inviteType    | firstName    | lastName | emailId               | gender | dob         | mobile     | eventCategory | eventTitle               | sourceType | sourceName |
+      | Single-Invite | Naveen Kumar | S        | naveen+02@examly.in   | Male   | 24-02-2003  | 8855885548 | Technical     | GG Campus Drive 0408202502 | Data       | Linkedin    |
 
- Scenario: Create Screening stage
-    Given I am inside the event page for "GG Campus Drive 04080405"
+  Scenario Outline: Create "<stageType>" stage
+    Given I am inside the event page for "<eventTitle>"
     And I navigate to "Stages" tab in the event
-    And I create a "Screening" stage named "Screening" with dropdown "Document form"
+    And I create a "<stageType>" stage named "<stageName>" <stageDropdown> <stageLink>
     Then I should see a success message for stage creation
 
-  Scenario: Create Test stage
-    Given I am inside the event page for "GG Campus Drive 04080405"
+    Examples:
+      | eventTitle              | stageType         | stageName         | stageDropdown         | stageLink                   |
+      | GG Campus Drive 0408202502 | Screening         | Screening         | with dropdown "Document form"             |                             |
+      | GG Campus Drive 0408202502 | Test              | Test              | with dropdown "Aptitude Assessment"        | and link "Test 1"           |
+      | GG Campus Drive 0408202502 | Interview         | Interview         | with dropdown "Feed back form"             | and link "Interview -1"     |
+      | GG Campus Drive 0408202502 | Offline Interview | Offline Interview | with dropdown "Feed back form"             | and link "Offline interview"|
+      | GG Campus Drive 0408202502 | Offer             | Offer             | with dropdown "offer_form"                 | and link "Job Offer Mail"   |
+      | GG Campus Drive 0408202502 | Onboarding        | Onboarding        |                                              |                             |
+      | GG Campus Drive 0408202502 | Others            | Others            |                                              |                             |
+
+  Scenario Outline: Create rule for "<stageType>" stage
+    Given I am inside the event page for "<eventTitle>"
     And I navigate to "Stages" tab in the event
-    And I create a "Test" stage named "Test" with dropdown "Aptitude Assessment" and link "Test 1"
-    Then I should see a success message for stage creation
+    And I click on "<stageType>" stage
+    And I click on "Rules" tab button
+    When I create a rule with the following parameters:
+      | when             | <whenCondition>             |
+      | conditionType    | <conditionType>             |
+      | positiveActions  | <positiveActions>           |
+      | positiveTemplate | <positiveTemplate>          |
 
-  Scenario: Create Interview stage
-    Given I am inside the event page for "GG Campus Drive 04080405"
-    And I navigate to "Stages" tab in the event
-    And I create a "Interview" stage named "Interview" with dropdown "Feed back form" and link "Interview -1"
-    Then I should see a success message for stage creation
-
-  Scenario: Create Offline Interview stage
-    Given I am inside the event page for "GG Campus Drive 04080405"
-    And I navigate to "Stages" tab in the event
-    And I create a "Offline Interview" stage named "Offline Interview" with dropdown "Feed back form" and link "Offline interview"
-    Then I should see a success message for stage creation
-
-  Scenario: Create Offer stage
-    Given I am inside the event page for "GG Campus Drive 04080405"
-    And I navigate to "Stages" tab in the event
-    And I create a "Offer" stage named "Offer" with dropdown "offer_form" and link "Job Offer Mail"
-    Then I should see a success message for stage creation
-
-  Scenario: Create Onboarding stage
-    Given I am inside the event page for "GG Campus Drive 04080405"
-    And I navigate to "Stages" tab in the event
-    And I create a "Onboarding" stage named "Onboarding"
-    Then I should see a success message for stage creation
-
-  Scenario: Create Others stage
-    Given I am inside the event page for "GG Campus Drive 04080405"
-    And I navigate to "Stages" tab in the event
-    And I create a "Others" stage named "Others"
-    Then I should see a success message for stage creation
-
-
-
-Scenario: Create rule for Eligibility Check stage
-  Given I am inside the event page for "GG Campus Drive 04080405"
-  And I navigate to "Stages" tab in the event
-  And I click on "Eligibility Check" stage
-  And I click on "Rules" tab button
-  When I create a rule with the following parameters:
-    | when             | Candidate Form Submit               |
-    | conditionType    | all                                     |
-    | positiveActions  | Send Email                              |
-    | positiveTemplate | Interview -2 |
-
-
-
-Scenario: Create rule for Screening stage
-  Given I am inside the event page for "GG Campus Drive 04080405"
-  And I navigate to "Stages" tab in the event
-  And I click on "Screening" stage
-  And I click on "Rules" tab button
-  When I create a rule with the following parameters:
-    | when             | Candidate Document Submit               |
-    | conditionType    | all                                     |
-    | positiveActions  | Send Email                              |
-    | positiveTemplate | Documentation Submit Request Mail -dev |
-
-
-Scenario: Create rule for Test stage
-  Given I am inside the event page for "GG Campus Drive 04080405"
-  And I navigate to "Stages" tab in the event
-  And I click on "Test" stage
-  And I click on "Rules" tab button
-  When I create a rule with the following parameters:
-    | when             | Candidate Test Submit |
-    | conditionType    | all                       |
-    | positiveActions  | Send Email                |
-    | positiveTemplate | Test Link Mail -dev       |
-
-
-Scenario: Create rule for Interview stage
-  Given I am inside the event page for "GG Campus Drive 04080405"
-  And I navigate to "Stages" tab in the event
-  And I click on "Interview" stage
-  And I click on "Rules" tab button
-  When I create a rule with the following parameters:
-    | when             | Candidate Feedback Submit        |
-    | conditionType    | all                              |
-    | positiveActions  | Send Email                       |
-    | positiveTemplate | Online Interview Invitation Mail-dev |
-
-
-Scenario: Create rule for Offline Interview stage
-  Given I am inside the event page for "GG Campus Drive 04080405"
-  And I navigate to "Stages" tab in the event
-  And I click on "Offline Interview" stage
-  And I click on "Rules" tab button
-  When I create a rule with the following parameters:
-    | when             | Candidate Feedback Submit           |
-    | conditionType    | all                                 |
-    | positiveActions  | Send Email                          |
-    | positiveTemplate | Offline Interview Invitation Mail -dev |
-
-
-Scenario: Create rule for Offer stage
-  Given I am inside the event page for "GG Campus Drive 04080405"
-  And I navigate to "Stages" tab in the event
-  And I click on "Offer" stage
-  And I click on "Rules" tab button
-  When I create a rule with the following parameters:
-    | when             | Candidate Move Stage      |
-    | conditionType    | all                       |
-    | positiveActions  | Send Email                |
-    | positiveTemplate | Job Offer Mail -dev       |
-
-
-Scenario: Create rule for Onboarding stage
-  Given I am inside the event page for "GG Campus Drive 04080405"
-  And I navigate to "Stages" tab in the event
-  And I click on "Onboarding" stage
-  And I click on "Rules" tab button
-  When I create a rule with the following parameters:
-    | when             | Candidate Not Joined      |
-    | conditionType    | all                       |
-    | positiveActions  | Send Email                |
-    | positiveTemplate | Job Rejection Mail-dev    |
+    Examples:
+      | eventTitle              | stageType         | whenCondition                 | conditionType | positiveActions | positiveTemplate                        |
+      | GG Campus Drive 0408202502 | Eligibility Check | Candidate Form Submit         | all           | Send Email      | Interview -2                            |
+      | GG Campus Drive 0408202502 | Screening         | Candidate Document Submit     | all           | Send Email      | Documentation Submit Request Mail -dev |
+      | GG Campus Drive 0408202502 | Test              | Candidate Test Submit         | all           | Send Email      | Test Link Mail -dev                     |
+      | GG Campus Drive 0408202502 | Interview         | Candidate Feedback Submit     | all           | Send Email      | Online Interview Invitation Mail-dev   |
+      | GG Campus Drive 0408202502 | Offline Interview | Candidate Feedback Submit     | all           | Send Email      | Offline Interview Invitation Mail -dev |
+      | GG Campus Drive 0408202502 | Offer             | Candidate Move Stage          | all           | Send Email      | Job Offer Mail -dev                     |
+      | GG Campus Drive 0408202502 | Onboarding        | Candidate Not Joined          | all           | Send Email      | Job Rejection Mail-dev                  |
