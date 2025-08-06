@@ -18,12 +18,15 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import pages.EventInfoPage;
 import pages.EventPage;
+import pages.RegistrationPage;
+import utils.MailUtils;
 
 public class EventInfoSteps {
 
     private final WebDriver driver = BaseTest.getDriver();
     private final EventPage eventPage = new EventPage(driver);
     private final EventInfoPage eventInfoPage = new EventInfoPage(driver);
+RegistrationPage registrationPage = new RegistrationPage(BaseTest.getDriver());
 
 
     @And("I navigate to {string} tab in the event")
@@ -53,7 +56,7 @@ public class EventInfoSteps {
     @And("I create a {string} stage named {string} with dropdown {string} and link {string}")
     public void iCreateStageWithDropdownAndLink(String stageType, String stageName, String dropdownValue, String linkValue) throws InterruptedException {
         eventInfoPage.clickAddStage();
-        Thread.sleep(1500);
+        Thread.sleep(2000);
         eventInfoPage.createStage(stageType, stageName, dropdownValue, linkValue);
         Thread.sleep(200);
     }   
@@ -61,7 +64,7 @@ public class EventInfoSteps {
     @And("I create a {string} stage named {string} with dropdown {string} ")
     public void iCreateStageWithDropdownOnly(String stageType, String stageName, String dropdownValue) throws InterruptedException {
         eventInfoPage.clickAddStage();
-        Thread.sleep(1500);
+        Thread.sleep(2000);
         eventInfoPage.createStage(stageType, stageName, dropdownValue, null);
         Thread.sleep(200);
     }
@@ -69,7 +72,7 @@ public class EventInfoSteps {
     @And("I create a {string} stage named {string}  ")
     public void iCreateStageWithNameOnly(String stageType, String stageName) throws InterruptedException {
         eventInfoPage.clickAddStage();
-        Thread.sleep(1500);
+        Thread.sleep(2000);
         eventInfoPage.createStage(stageType, stageName, null, null);
         Thread.sleep(200);
     }   
@@ -149,8 +152,10 @@ public void i_perform_stage_action_without_parameters(String action) throws Inte
 
 
 @Given("I click on {string} tab button")
-public void i_click_on_tab_button(String string) {
+public void i_click_on_tab_button(String string) throws InterruptedException {
 eventInfoPage.clickRulesTabBtn();
+Thread.sleep(500);
+
 }
 
 @When("^I create a rule with the following parameters:$")
@@ -209,7 +214,7 @@ public void i_create_rule_with_parameters(DataTable dataTable) throws Interrupte
             negativeTemplates
     );
 
-    Thread.sleep(1000); // optional
+    Thread.sleep(2000); // optional
 }
 
 
@@ -218,6 +223,80 @@ public void i_create_rule_with_parameters(DataTable dataTable) throws Interrupte
 
 
 
+
+
+
+
+
+@And("I copy the registration URL")
+public void iCopyTheRegistrationURL() {
+    eventInfoPage.clickCopyRegistrationUrl();
+}
+
+@And("I open the {string} in new tab")
+public void iOpenTheURLInNewTab(String urlType) throws Exception {
+    if (urlType.equalsIgnoreCase("URL")) {
+        eventInfoPage.openNewTabWithCopiedUrl();
+    }
+}
+
+@Given("I fill the email ID with {string}")
+public void i_fill_the_email_id_with(String email) {
+    registrationPage.fillEmail(email);
+}
+
+@Given("I confirm the email ID with {string}")
+public void i_confirm_the_email_id_with(String string) {
+registrationPage.confirmEmail(string);
+}
+
+@Given("I click on verify button")
+public void i_click_on_verify_button() {
+    registrationPage.clickVerify();
+}
+
+@Given("I enter OTP from mail")
+public void i_enter_otp_from_mail() throws InterruptedException {
+    // Fetch OTP dynamically from mail
+    Thread.sleep(20000);
+    String otp = MailUtils.getOtpFromEmail("naveeniamneo112@gmail.com", "lgzbeyqgfmwtccnw"); // replace with your real app password
+
+    if (otp == null || otp.length() != 6) {
+        throw new RuntimeException("❌ Failed to fetch a valid 6-digit OTP from email.");
+    }
+
+    RegistrationPage.enterOtp(otp);  // static method call since your method is static
+}
+
+
+@Given("I select gender as {string}")
+public void i_select_gender_as(String string) throws InterruptedException {
+registrationPage.selectGender(string);
+
+}
+
+@Given("I enter registration number as {string}")
+public void enter_registration_number_as(String string) {
+registrationPage.enterRegNumber(string);
+
+}
+
+@Given("I enter company name as {string}")
+public void i_neter_company_name_as(String string) {
+registrationPage.enterCompanyName(string);
+
+}
+
+@Given("Click Submit")
+public void click_submit() throws InterruptedException {
+    registrationPage.clickSubmit();
+
+}
+
+@Given("I click Verify submit button")
+public void click_verify_submit(){
+registrationPage.clickVerifySubmit();
+}
 
 
 }
