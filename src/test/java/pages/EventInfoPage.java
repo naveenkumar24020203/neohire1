@@ -12,12 +12,22 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.awt.AWTException;
+import java.awt.HeadlessException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+
 import utils.DateTimePickerUtils;
 import utils.ElementUtils;
 
 import static utils.ElementUtils.*;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -325,11 +335,72 @@ private WebElement ruleTemplateDropdown;
 
 @FindBy(xpath = "//button[normalize-space()='Save']")
 private WebElement saveRuleButton;
-
+@FindBy(xpath = "//div[@class='event-link']")
+private WebElement copyRegUrlButton;
 
 public void clickRulesTabBtn() {
     rulesTabBtn.click();
 }
+
+public void clickCandidatesTabBtn() {
+        wait.until(ExpectedConditions.elementToBeClickable(candidatesTab)).click();
+}
+
+
+
+
+
+
+public void clickCopyRegistrationUrl() {
+    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", copyRegUrlButton);
+    System.out.println("📋 Registration URL copied.");
+}
+
+public void openNewTabWithCopiedUrl() throws InterruptedException, HeadlessException, UnsupportedFlavorException, IOException, AWTException {
+    Robot robot = new Robot();
+
+    // Open new tab: CMD + T (Mac) or CTRL + T (Windows/Linux)
+    robot.keyPress(KeyEvent.VK_META); // Use CTRL for Windows
+    robot.keyPress(KeyEvent.VK_T);
+    robot.keyRelease(KeyEvent.VK_T);
+    robot.keyRelease(KeyEvent.VK_META);
+    Thread.sleep(1000);
+
+    // Get copied text from clipboard
+    String url = Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).toString();
+
+    // Switch to new tab and navigate
+    ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+    driver.switchTo().window(tabs.get(tabs.size() - 1));
+    driver.get(url);
+    System.out.println("🌐 Opened copied registration URL in new tab: " + url);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public void clickShortlistedTabBtn() {
     rulesTabBtn.click();
@@ -655,7 +726,7 @@ public void clickStatusButton(String label) {
     try {
         WebElement button = wait.until(ExpectedConditions.presenceOfElementLocated(buttonLocator));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({inline: 'center'});", button);
-        Thread.sleep(300);
+        Thread.sleep(600);
 
         try {
             button.click();
@@ -906,6 +977,7 @@ public void performStageAction( String action, Map<String, String> optionalParam
 
     public void createStage(String stageType, String stageName, String dropdownValue, String linkValue) throws InterruptedException {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            Thread.sleep(1000);
 
      switch (stageType.toLowerCase()) {
         case "screening":
@@ -990,7 +1062,7 @@ public void performStageAction( String action, Map<String, String> optionalParam
 
     // Save Stage
     saveStageButton.click();
-    Thread.sleep(1500);
+    Thread.sleep(2000);
 }
 
 

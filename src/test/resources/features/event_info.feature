@@ -345,3 +345,21 @@ Scenario: Create rule for Onboarding stage
     | positiveActions  | Send Email                |
     | positiveTemplate | Job Rejection Mail-dev    |
   Then I should see a success message for rule creation
+
+
+
+@eventRegsiterByUrl
+Scenario Outline: Enroll candidate by URL
+  Given I am inside the event page for "GG Campus Drive 0408202600"
+  And I navigate to "Candidates" tab in the event
+  And I copy the registration URL
+  And I open the "URL" in new tab
+  And I fill the email ID with "naveeniamneo112@gmail.com"
+  And I confirm the email ID with "naveeniamneo112@gmail.com"
+  And I click on verify button
+  And I enter OTP from mail
+  And I click Verify submit button
+  And I select gender as "Male"
+  And I enter registration number as "ddfd"
+  And I enter company name as "name"
+  And Click Submit

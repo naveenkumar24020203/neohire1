@@ -37,7 +37,7 @@ Feature: Smoke Test for Role creation, Event creation, Stage Creation and Candid
 
   Examples:
     | roleName        | roleType  | workMode | country | state      | city        | businessUnit | eventTitle            | eventStart           | eventEnd             | regStart            | regEnd              | jobRoles     | experience | minSalary | maxSalary | eventType  | eventCategory | emailTemplate       | registrationForm | institutionName                                                                                      | institutionAddress           |
-    | QQQ Engineer   | Full Time | Hybrid   | India   | Tamil Nadu | Coimbatore  | uuhhd        | GG Campus Drive 0408202505 | 2026-08-28 12:30 PM  | 2026-08-29 12:00 PM  | 2026-08-26 12:00 PM | 2026-08-27 12:00 PM | QQQ Engineer | 2          | 300000    | 600000    | In-Campus | Technical     | Test Link            | demo Copy        | AAA COLLEGE OF ENGINEERING AND TECHNOLOGY, SIR VISHVESHWARIAH INSTITUE OF SCIENCE AND TECHNOLOGY | AddreQQQQQQQQQs              |
+    | TTT Engineer   | Full Time | Hybrid   | India   | Tamil Nadu | Coimbatore  | uuhhd        | GG Campus Drive 0508202503 | 2026-08-28 12:30 PM  | 2026-08-29 12:00 PM  | 2026-08-26 12:00 PM | 2026-08-27 12:00 PM | TTT Engineer | 2          | 300000    | 600000    | In-Campus | Technical     | Test Link            | demo Copy        | AAA COLLEGE OF ENGINEERING AND TECHNOLOGY, SIR VISHVESHWARIAH INSTITUE OF SCIENCE AND TECHNOLOGY | AddreTTTTTTTTTs              |
 
   Scenario Outline: Invite candidate to the created event
     Given I am on the Canditate page
@@ -57,7 +57,7 @@ Feature: Smoke Test for Role creation, Event creation, Stage Creation and Candid
 
     Examples:
       | inviteType    | firstName    | lastName | emailId               | gender | dob         | mobile     | eventCategory | eventTitle               | sourceType | sourceName |
-      | Single-Invite | Naveen Kumar | S        | naveen+02@examly.in   | Male   | 24-02-2003  | 8855885548 | Technical     | GG Campus Drive 0408202505 | Data       | Linkedin    |
+      | Single-Invite | Naveen Kumar | S        | naveen+02@examly.in   | Male   | 24-02-2003  | 8855885548 | Technical     | GG Campus Drive 0508202503 | Data       | Linkedin    |
 
   Scenario Outline: Create "<stageType>" stage
     Given I am inside the event page for "<eventTitle>"
@@ -67,13 +67,13 @@ Feature: Smoke Test for Role creation, Event creation, Stage Creation and Candid
 
     Examples:
       | eventTitle              | stageType         | stageName         | stageDropdown         | stageLink                   |
-      | GG Campus Drive 0408202505 | Screening         | Screening         | with dropdown "Document form"             |                             |
-      | GG Campus Drive 0408202505 | Test              | Test              | with dropdown "Aptitude Assessment"        | and link "Test 1"           |
-      | GG Campus Drive 0408202505 | Interview         | Interview         | with dropdown "Feed back form"             | and link "Interview -1"     |
-      | GG Campus Drive 0408202505 | Offline Interview | Offline Interview | with dropdown "Feed back form"             | and link "Offline interview"|
-      | GG Campus Drive 0408202505 | Offer             | Offer             | with dropdown "offer_form"                 | and link "Job Offer Mail"   |
-      | GG Campus Drive 0408202505 | Onboarding        | Onboarding        |                                              |                             |
-      | GG Campus Drive 0408202505 | Others            | Others            |                                              |                             |
+      | GG Campus Drive 0508202503 | Screening         | Screening         | with dropdown "Document form"             |                             |
+      | GG Campus Drive 0508202503 | Test              | Test              | with dropdown "Aptitude Assessment"        | and link "Test 1"           |
+      | GG Campus Drive 0508202503 | Interview         | Interview         | with dropdown "Feed back form"             | and link "Interview -1"     |
+      | GG Campus Drive 0508202503 | Offline Interview | Offline Interview | with dropdown "Feed back form"             | and link "Offline interview"|
+      | GG Campus Drive 0508202503 | Offer             | Offer             | with dropdown "offer_form"                 | and link "Job Offer Mail"   |
+      | GG Campus Drive 0508202503 | Onboarding        | Onboarding        |                                              |                             |
+      | GG Campus Drive 0508202503 | Others            | Others            |                                              |                             |
 
   Scenario Outline: Create rule for "<stageType>" stage
     Given I am inside the event page for "<eventTitle>"
@@ -88,10 +88,10 @@ Feature: Smoke Test for Role creation, Event creation, Stage Creation and Candid
 
     Examples:
       | eventTitle              | stageType         | whenCondition                 | conditionType | positiveActions | positiveTemplate                        |
-      | GG Campus Drive 0408202505 | Eligibility Check | Candidate Form Submit         | all           | Send Email      | Interview -2                            |
-      | GG Campus Drive 0408202505 | Screening         | Candidate Document Submit     | all           | Send Email      | Documentation Submit Request Mail -dev |
-      | GG Campus Drive 0408202505 | Test              | Candidate Test Submit         | all           | Send Email      | Test Link Mail -dev                     |
-      | GG Campus Drive 0408202505 | Interview         | Candidate Feedback Submit     | all           | Send Email      | Online Interview Invitation Mail-dev   |
-      | GG Campus Drive 0408202505 | Offline Interview | Candidate Feedback Submit     | all           | Send Email      | Offline Interview Invitation Mail -dev |
-      | GG Campus Drive 0408202505 | Offer             | Candidate Move Stage          | all           | Send Email      | Job Offer Mail -dev                     |
-      | GG Campus Drive 0408202505 | Onboarding        | Candidate Not Joined          | all           | Send Email      | Job Rejection Mail-dev                  |
+      | GG Campus Drive 0508202503 | Eligibility Check | Candidate Form Submit         | all           | Send Email      | Interview -2                            |
+      | GG Campus Drive 0508202503 | Screening         | Candidate Document Submit     | all           | Send Email      | Documentation Submit Request Mail -dev |
+      | GG Campus Drive 0508202503 | Test              | Candidate Test Submit         | all           | Send Email      | Test Link Mail -dev                     |
+      | GG Campus Drive 0508202503 | Interview         | Candidate Feedback Submit     | all           | Send Email      | Online Interview Invitation Mail-dev   |
+      | GG Campus Drive 0508202503 | Offline Interview | Candidate Feedback Submit     | all           | Send Email      | Offline Interview Invitation Mail -dev |
+      | GG Campus Drive 0508202503 | Offer             | Candidate Move Stage          | all           | Send Email      | Job Offer Mail -dev                     |
+      | GG Campus Drive 0508202503 | Onboarding        | Candidate Not Joined          | all           | Send Email      | Job Rejection Mail-dev                  |

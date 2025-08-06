@@ -246,7 +246,7 @@ public boolean isEventCreatedSuccessfully() {
     wait.until(ExpectedConditions.visibilityOf(searchInput));
     searchInput.clear();
     searchInput.sendKeys(eventName);
-    Thread.sleep(200);
+    Thread.sleep(400);
 
     // Wait for search result to appear (i.e., the event cell becomes visible)
     String resultXpath = "//table//td[normalize-space(text())='" + eventName + "']";
@@ -298,8 +298,9 @@ public boolean isEventCreatedSuccessfully() {
     }
 
 
-    public void clickEvent(String eventName) {
+    public void clickEvent(String eventName) throws InterruptedException {
     WebDriver driver = BaseTest.getDriver();
+    Thread.sleep(250);
 
     String xpath = "//table//td[normalize-space(text())='" + eventName + "']";
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));

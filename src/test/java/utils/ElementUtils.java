@@ -36,7 +36,7 @@ Thread.sleep(600); // Optional fine-tune delay
 
     // Step 2: Build option locator dynamically
     By optionLocator = By.xpath("//li[@role='option' and normalize-space()='" + valueToSelect.trim() + "']");
-
+//li[@role='option' and normalize-space()='Male']
 
     // Step 3: Try to click, fallback to JS click if intercepted
     boolean selected = wait.until(driver1 -> {
